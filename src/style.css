@@ -249,12 +249,15 @@ bim-grid[floating] .dashboard-card {
 }
 
 .bienvenida-titulo {
-  font-size: 1.35rem;
-  font-weight: bold;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--bim-ui_bg-contrast-100);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .bienvenida-subtitulo {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--bim-ui_bg-contrast-80);
 }
 
@@ -263,10 +266,10 @@ bim-grid[floating] .dashboard-card {
   padding-left: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  color: var(--bim-ui_bg-contrast-80);
+  gap: 0.5rem;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: var(--bim-ui_bg-contrast-100);
 }
 
 .bienvenida-pie {

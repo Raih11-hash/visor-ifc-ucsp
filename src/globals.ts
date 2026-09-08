@@ -19,7 +19,7 @@ const urlAbsoluta = (relativa: string) =>
 export const APP = {
   titulo: "Visor IFC",
   subtitulo: "UCSP · Ingeniería Civil",
-  version: "1.1",
+  version: "1.2",
   modeloEjemploNombre: "Edificio ejemplo (IFC4)",
 } as const;
 
@@ -27,6 +27,11 @@ export const APP = {
  * de clase (p. ej. graderías): suelta el .ifc en public/models/ y añade una
  * línea aquí con su id, nombre y archivo. El link ?modelo=<id> lo abre directo. */
 export const EJEMPLOS = [
+  {
+    id: "graderias",
+    nombre: "Graderías (RV11)",
+    archivo: "graderias.ifc",
+  },
   { id: "ejemplo", nombre: "Edificio ejemplo (IFC4)", archivo: "ejemplo.ifc" },
 ] as const;
 

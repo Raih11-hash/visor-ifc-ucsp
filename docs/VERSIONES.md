@@ -4,6 +4,14 @@ Convención: cada cambio visible y probado sube la versión (1.0 → 1.1 → 1.2
 → 1.9 → 2.0). En git, cada versión publicada lleva su etiqueta (`git tag v1.1`).
 Para volver a una versión anterior: `git checkout v1.0` (o desplegar su commit).
 
+## v1.2 (2026-09-08)
+- Modelo propio de clase agregado: "Graderías (RV11)" (de `Docencia - 2026.1/
+  Gestión de la construcción/Modelo Graderias _ RV11.ifc` → `public/models/
+  graderias.ifc`). Aparece como primer botón de ejemplo y se abre directo con
+  `https://visor-ifc-ucsp.vercel.app/?modelo=graderias`.
+- Bienvenida más legible: título y pasos ahora usan el color claro del tema
+  (antes heredaban negro del navegador sobre fondo oscuro), título más grande.
+
 ## v1.1 (2026-09-08)
 - Pantalla de bienvenida con guía rápida y versión visible (botón "Comenzar").
 - Insignia de versión en la cabecera del panel lateral.
