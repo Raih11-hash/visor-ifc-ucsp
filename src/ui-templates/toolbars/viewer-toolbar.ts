@@ -2,6 +2,7 @@
  * toolbars/viewer-toolbar.ts — Barra inferior del viewport.
  *
  * Sección "Visibilidad": mostrar todo + modo fantasma.
+ * Sección "Captura": descarga la vista actual como PNG.
  * Sección "Selección": enfocar, ocultar, aislar y colorear lo seleccionado.
  */
 
@@ -28,7 +29,7 @@ const setModelTransparent = (components: OBC.Components) => {
   const materials = [...fragments.core.models.materials.list.values()];
   for (const material of materials) {
     if (material.userData.customId) continue;
-    // save colors
+    // Guarda los colores originales para restaurarlos al salir del modo.
     let color: number | undefined;
     if ("color" in material) {
       color = material.color.getHex();
@@ -42,7 +43,7 @@ const setModelTransparent = (components: OBC.Components) => {
       opacity: material.opacity,
     });
 
-    // set color
+    // Vuelve el material transparente (modo fantasma).
     material.transparent = true;
     material.opacity = 0.05;
     material.needsUpdate = true;

@@ -19,8 +19,7 @@ const urlAbsoluta = (relativa: string) =>
 export const APP = {
   titulo: "Visor IFC",
   subtitulo: "UCSP · Ingeniería Civil",
-  version: "1.2",
-  modeloEjemploNombre: "Edificio ejemplo (IFC4)",
+  version: "1.2.1",
 } as const;
 
 /** Modelos de ejemplo incluidos en public/models/. Para agregar uno propio
@@ -42,8 +41,6 @@ export const RUTAS = {
   /** Carpeta con web-ifc.wasm (public/wasm/). web-ifc exige la URL absoluta
    * terminada en "/" y él agrega el nombre del archivo .wasm. */
   carpetaWasm: urlAbsoluta(`${base}wasm/`),
-  /** Modelo IFC de ejemplo (buildingSMART, IFC4) para probar sin archivos. */
-  modeloEjemplo: `${base}models/ejemplo.ifc`,
   /** Carpeta de modelos de ejemplo (para ?modelo= y botones múltiples). */
   carpetaModelos: `${base}models/`,
 } as const;
