@@ -4,6 +4,16 @@ Convención: cada cambio visible y probado sube la versión (1.0 → 1.1 → 1.2
 → 1.9 → 2.0). En git, cada versión publicada lleva su etiqueta (`git tag v1.1`).
 Para volver a una versión anterior: `git checkout v1.0` (o desplegar su commit).
 
+## v1.3.1 (2026-09-08)
+- Cartel instantáneo: "Comenzar" cierra al toque (sin esperar animación) y
+  con `?modelo=` el modelo carga en segundo plano; si falla, el cartel se
+  reabre con el motivo.
+- Nitidez: el renderizador usa la densidad real de píxeles (hasta 2x) para
+  que el modelo no se vea pixelado; se reaplica en cada resize.
+- Barra inferior solo con iconos (`labels-hidden`, los textos siguen en
+  ayudas) para que no se corte en pantallas angostas; diálogo de choques
+  con alto máximo y scroll.
+
 ## v1.3 (2026-09-08)
 - Auto-encuadre: cada modelo cargado (botón, arrastre, ejemplo, `?modelo=`)
   deja la cámara encuadrando todo (`fitToItems` en `carga-ifc.ts`).

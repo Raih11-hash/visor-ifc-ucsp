@@ -47,6 +47,10 @@ export const crearMundo = (components: OBC.Components): MundoPrincipal => {
     // del momento del frame. Costo mínimo de memoria.
     preserveDrawingBuffer: true,
   });
+  // Nitidez: renderiza a la densidad real de píxeles (hasta 2x) para que el
+  // modelo no se vea pixelado en pantallas modernas. Tope en 2x para no
+  // castigar la fluidez en PCs modestos.
+  world.renderer.three.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   world.camera = new OBC.OrthoPerspectiveCamera(components);
   world.camera.threePersp.near = 0.01;
   world.camera.threePersp.updateProjectionMatrix();
@@ -60,6 +64,9 @@ export const crearMundo = (components: OBC.Components): MundoPrincipal => {
   const resizeWorld = () => {
     world.renderer?.resize();
     world.camera.updateAspect();
+    // El redimensionado del motor puede restablecer la densidad de
+    // píxeles: se reaplica para no perder nitidez.
+    world.renderer?.three.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   };
   viewport.addEventListener("resize", resizeWorld);
 

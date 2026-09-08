@@ -17,7 +17,8 @@ página, se mira aquí primero.
 ## Núcleo 3D e IFC (`src/core/`)
 
 - **`mundo.ts` → `crearMundo()`**: crea el mundo 3D (escena oscura + grilla,
-  cámara perspectiva/ortográfica, renderizador con sombras y bordes).
+  cámara perspectiva/ortográfica, renderizador con sombras y bordes,
+  nitidez hasta 2x según la pantalla).
   Devuelve `{ world, viewport }` que usa todo lo demás.
 - **`carga-ifc.ts`**: el motor de archivos.
   - `configurarMotorIfc()` arranca fragments (worker autoalojado) y el

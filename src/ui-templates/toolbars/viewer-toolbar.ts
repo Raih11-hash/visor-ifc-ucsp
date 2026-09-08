@@ -185,7 +185,7 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
   };
 
   return BUI.html`
-    <bim-toolbar>
+    <bim-toolbar labels-hidden>
       <bim-toolbar-section label="Visibilidad" icon=${appIcons.SHOW}>
         <bim-button tooltip-title=${tooltips.SHOW_ALL.TITLE} tooltip-text=${tooltips.SHOW_ALL.TEXT} icon=${appIcons.SHOW} label="Mostrar todo" @click=${onShowAll}></bim-button> 
         <bim-button tooltip-title=${tooltips.GHOST.TITLE} tooltip-text=${tooltips.GHOST.TEXT} icon=${appIcons.TRANSPARENT} label="Fantasma" @click=${onToggleGhost}></bim-button>

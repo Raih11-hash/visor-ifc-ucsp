@@ -311,6 +311,8 @@ bim-grid[floating] .dashboard-card {
 /* --- Diálogo de choques (ver core/choques.ts) --- */
 .choques-dialogo {
   width: min(26rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
   background: var(--bim-ui_bg-contrast-10);
   color: var(--bim-ui_bg-contrast-100);
   border: 1px solid var(--bim-ui_bg-contrast-40);

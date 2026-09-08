@@ -151,8 +151,16 @@ if (versionEl) {
 
 const ocultarBienvenida = () => {
   if (!bienvenida) return;
+  // Salida inmediata (sin esperar animaciones): el cartel no debe
+  // retener al alumno. Se conserva en el DOM por si hay que reabrirlo.
   bienvenida.classList.add("bienvenida-oculta");
-  setTimeout(() => bienvenida.remove(), 400);
+  bienvenida.hidden = true;
+};
+
+const mostrarBienvenida = () => {
+  if (!bienvenida) return;
+  bienvenida.classList.remove("bienvenida-oculta");
+  bienvenida.hidden = false;
 };
 
 document
@@ -176,11 +184,13 @@ if (modeloPid) {
       `No hay ningún modelo con id "${modeloPid}". Prueba con: ${ids}.`,
     );
   } else {
+    // El cartel se cierra al instante y el modelo carga en segundo plano.
+    ocultarBienvenida();
     try {
       await cargarModeloEjemplo(components, ejemploPedido);
-      ocultarBienvenida();
     } catch (error) {
-      // Si el modelo no carga, la bienvenida se queda y explica por qué.
+      // Si el modelo no carga, se reabre el cartel y explica por qué.
+      mostrarBienvenida();
       mostrarErrorBienvenida(
         error instanceof Error ? error.message : "No se pudo cargar el modelo.",
       );

@@ -19,7 +19,7 @@ const urlAbsoluta = (relativa: string) =>
 export const APP = {
   titulo: "Visor IFC",
   subtitulo: "UCSP · Ingeniería Civil",
-  version: "1.3",
+  version: "1.3.1",
 } as const;
 
 /** Modelos de ejemplo incluidos en public/models/. Para agregar uno propio
