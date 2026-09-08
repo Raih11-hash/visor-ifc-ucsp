@@ -21,13 +21,9 @@
 import * as OBC from "@thatopen/components";
 import * as BUI from "@thatopen/ui";
 import * as TEMPLATES from "./ui-templates";
-import { APP, CONTENT_GRID_ID, EJEMPLOS } from "./globals";
+import { APP, CONTENT_GRID_ID } from "./globals";
 import { crearMundo } from "./core/mundo";
-import {
-  activarArrastrarSoltar,
-  cargarModeloEjemplo,
-  configurarMotorIfc,
-} from "./core/carga-ifc";
+import { activarArrastrarSoltar, configurarMotorIfc } from "./core/carga-ifc";
 import { configurarCorteYMedicion, configurarResaltado } from "./core/interaccion";
 import { viewportSettingsTemplate } from "./ui-templates/buttons/viewport-settings";
 
@@ -141,59 +137,3 @@ app.layouts = {
 app.layout = "App";
 
 document.title = `${APP.titulo} · UCSP`;
-
-// --- Pantalla de bienvenida (versión, guía rápida, ?modelo=) ---
-const bienvenida = document.getElementById("bienvenida");
-const versionEl = document.getElementById("bienvenida-version");
-if (versionEl) {
-  versionEl.textContent = `Versión ${APP.version}`;
-}
-
-const ocultarBienvenida = () => {
-  if (!bienvenida) return;
-  // Salida inmediata (sin esperar animaciones): el cartel no debe
-  // retener al alumno. Se conserva en el DOM por si hay que reabrirlo.
-  bienvenida.classList.add("bienvenida-oculta");
-  bienvenida.hidden = true;
-};
-
-const mostrarBienvenida = () => {
-  if (!bienvenida) return;
-  bienvenida.classList.remove("bienvenida-oculta");
-  bienvenida.hidden = false;
-};
-
-document
-  .getElementById("bienvenida-boton")
-  ?.addEventListener("click", ocultarBienvenida);
-
-// Link ?modelo=<id> (ver EJEMPLOS): abre el ejemplo elegido ya cargado.
-const modeloPid = new URLSearchParams(window.location.search).get("modelo");
-const mostrarErrorBienvenida = (texto: string) => {
-  const errorEl = document.getElementById("bienvenida-error");
-  if (!errorEl) return;
-  errorEl.textContent = texto;
-  errorEl.hidden = false;
-};
-if (modeloPid) {
-  const ejemploPedido = EJEMPLOS.find((ejemplo) => ejemplo.id === modeloPid);
-  if (!ejemploPedido) {
-    // El id no existe: la bienvenida se queda y dice cuáles sí existen.
-    const ids = EJEMPLOS.map((ejemplo) => ejemplo.id).join(", ");
-    mostrarErrorBienvenida(
-      `No hay ningún modelo con id "${modeloPid}". Prueba con: ${ids}.`,
-    );
-  } else {
-    // El cartel se cierra al instante y el modelo carga en segundo plano.
-    ocultarBienvenida();
-    try {
-      await cargarModeloEjemplo(components, ejemploPedido);
-    } catch (error) {
-      // Si el modelo no carga, se reabre el cartel y explica por qué.
-      mostrarBienvenida();
-      mostrarErrorBienvenida(
-        error instanceof Error ? error.message : "No se pudo cargar el modelo.",
-      );
-    }
-  }
-}

@@ -12,17 +12,10 @@
 
 import * as OBC from "@thatopen/components";
 import * as FRAGS from "@thatopen/fragments";
-import { EJEMPLOS, RUTAS } from "../globals";
+import { APP, RUTAS } from "../globals";
 import type { MundoPrincipal } from "./mundo";
 
 type MundoEscena = MundoPrincipal["world"];
-
-/** Un modelo de ejemplo disponible en public/models/ (ver EJEMPLOS en globals). */
-export interface OpcionEjemplo {
-  id: string;
-  nombre: string;
-  archivo: string;
-}
 
 export const configurarMotorIfc = async (
   components: OBC.Components,
@@ -54,8 +47,7 @@ export const configurarMotorIfc = async (
     fragments.core.update(true);
   });
 
-  // Cada modelo cargado (por botón, arrastre o ejemplo) aparece en escena
-  // y la cámara lo encuadra automáticamente.
+  // Cada modelo cargado (por botón, arrastre o ejemplo) aparece en escena.
   fragments.list.onItemSet.add(async ({ value: modelo }) => {
     modelo.useCamera(world.camera.three);
     modelo.getClippingPlanesEvent = () => {
@@ -63,14 +55,6 @@ export const configurarMotorIfc = async (
     };
     world.scene.three.add(modelo.object);
     await fragments.core.update(true);
-    // Auto-encuadre de cortesía (no debe romper la carga si falla).
-    try {
-      if (world.camera instanceof OBC.SimpleCamera) {
-        await world.camera.fitToItems();
-      }
-    } catch {
-      // La cámara queda donde estaba; el alumno la ajusta a mano.
-    }
   });
 
   const ifcLoader = components.get(OBC.IfcLoader);
@@ -92,16 +76,19 @@ export const cargarIfcDesdeBytes = async (
 
 export const cargarModeloEjemplo = async (
   components: OBC.Components,
-  ejemplo: OpcionEjemplo = EJEMPLOS[0],
 ): Promise<FRAGS.FragmentsModel> => {
-  const respuesta = await fetch(`${RUTAS.carpetaModelos}${ejemplo.archivo}`);
+  const respuesta = await fetch(RUTAS.modeloEjemplo);
   if (!respuesta.ok) {
     throw new Error(
       `No se pudo descargar el modelo de ejemplo (${respuesta.status}).`,
     );
   }
   const buffer = await respuesta.arrayBuffer();
-  return cargarIfcDesdeBytes(components, new Uint8Array(buffer), ejemplo.nombre);
+  return cargarIfcDesdeBytes(
+    components,
+    new Uint8Array(buffer),
+    APP.modeloEjemploNombre,
+  );
 };
 
 export const activarArrastrarSoltar = (

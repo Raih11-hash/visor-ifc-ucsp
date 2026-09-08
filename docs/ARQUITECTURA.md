@@ -7,28 +7,23 @@ base de datos. Cada archivo tiene un comentario de cabecera que explica su rol.
 
 ## Arranque (`src/main.ts`, `index.html`)
 
-`index.html` solo crea el contenedor `<bim-grid id="app">`, el overlay de
-bienvenida (`#bienvenida`: guía rápida + versión) y carga `main.ts`.
+`index.html` solo crea el contenedor `<bim-grid id="app">` y carga `main.ts`.
 `main.ts` es la "raíz de composición": no tiene lógica de negocio, solo
 ordena los pasos (crear componentes → mundo → interacción → motor IFC →
-interfaz → bienvenida + autocarga `?modelo=`). Si algo falla al abrir la
-página, se mira aquí primero.
+interfaz). Si algo falla al abrir la página, se mira aquí primero.
 
 ## Núcleo 3D e IFC (`src/core/`)
 
 - **`mundo.ts` → `crearMundo()`**: crea el mundo 3D (escena oscura + grilla,
-  cámara perspectiva/ortográfica, renderizador con sombras y bordes,
-  nitidez hasta 2x según la pantalla).
+  cámara perspectiva/ortográfica, renderizador con sombras y bordes).
   Devuelve `{ world, viewport }` que usa todo lo demás.
 - **`carga-ifc.ts`**: el motor de archivos.
   - `configurarMotorIfc()` arranca fragments (worker autoalojado) y el
     lector IFC (WASM autoalojado, sin CDN). Cada modelo cargado entra
-    solo a la escena y la cámara lo encuadra (`fitToItems`).
+    solo a la escena.
   - `cargarIfcDesdeBytes()` convierte bytes `.ifc` en modelo 3D.
-  - `cargarModeloEjemplo()` descarga el IFC de ejemplo incluido en la app.
+  - `cargarModeloEjemplo()` descarga el edificio de muestra (buildingSMART).
   - `activarArrastrarSoltar()` abre un `.ifc` soltado sobre el visor.
-- **`choques.ts`**: revisión gruesa de choques entre modelos (cajas
-  envolventes por pares + diálogo con "Enfocar" por choque).
 - **`interaccion.ts`**:
   - `configurarResaltado()` pinta la selección en verde (alimenta el panel
     de propiedades).
@@ -44,30 +39,24 @@ página, se mira aquí primero.
 - **`groups/barra-lateral.ts`**: columna izquierda: cabecera UCSP + Modelos
   + Árbol + Vistas guardadas.
 - **`groups/grid-sidebar.ts`**: mini-barra de navegación (del template).
-- **`sections/models.ts`**: lista de modelos + botones IFC / Fragments +
-  un botón por modelo de ejemplo (lista `EJEMPLOS` en `globals.ts`) +
-  buscador + mensajes de estado. El link `?modelo=<id>` autocarga un
-  ejemplo al abrir (ver `main.ts`), ideal para mandar a alumnos.
+- **`sections/models.ts`**: lista de modelos + botones IFC / Fragments /
+  Cargar ejemplo + buscador + mensajes de estado.
 - **`sections/arbol.ts`**: jerarquía del edificio (proyecto → niveles →
   elementos). Clic = selecciona en el 3D. *(Nuevo en esta versión.)*
 - **`sections/elements-data.ts`**: propiedades del elemento seleccionado,
   con buscador y exportación a TSV (abre en Excel).
 - **`sections/viewpoints.ts`**: guarda vistas de cámara para retomar en clase.
-- **`toolbars/viewer-toolbar.ts`**: mostrar todo, fantasma, captura PNG,
-  choques entre modelos, enfocar, ocultar, aislar, colorear.
+- **`toolbars/viewer-toolbar.ts`**: mostrar todo, fantasma, enfocar, ocultar,
+  aislar, colorear.
 - **`buttons/viewport-settings.ts`**: grilla sí/no y tipo de proyección.
-- **`globals.ts`**: textos en español, iconos, rutas (`RUTAS`), versión
-  (`APP.version`, visible en bienvenida e insignia lateral) y lista
-  `EJEMPLOS` de modelos de ejemplo.
+- **`globals.ts`**: textos en español, iconos, rutas (`RUTAS`) y datos UCSP.
 
 ## Archivos servidos tal cual (`public/` → se copian a `dist/`)
 
 - **`wasm/web-ifc.wasm`**: motor que lee IFC, autoalojado (antes: CDN unpkg).
 - **`fragments-worker.mjs`**: worker que convierte IFC a geometría
   (antes: ruta `/node_modules/...` que se rompía en producción).
-- **`models/`**: IFCs de ejemplo que sirven los botones y `?modelo=`:
-  `ejemplo.ifc` (edificio IFC4 buildingSMART) y `graderias.ifc` (modelo
-  propio de clase, RV11).
+- **`models/ejemplo.ifc`**: edificio IFC4 de muestra (buildingSMART, 142 KB).
 
 ## Publicar en Vercel
 

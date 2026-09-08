@@ -44,10 +44,7 @@ export const barraLateralTemplate: BUI.StatefullComponent<BarraLateralState> = (
     <div style="display: flex; flex-direction: column; gap: 1rem; overflow-y: auto; height: 100%; padding: 0 0.25rem;">
       <div>
         <bim-label style="font-size: 1.1rem; font-weight: bold;">${APP.titulo}</bim-label>
-        <div style="display: flex; align-items: center; gap: 0.4rem;">
-          <bim-label style="font-size: 0.8rem;">${APP.subtitulo}</bim-label>
-          <bim-label style="font-size: 0.68rem; color: var(--bim-ui_accent-base); border: 1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.75rem; padding: 0.05rem 0.45rem;">v${APP.version}</bim-label>
-        </div>
+        <bim-label style="font-size: 0.8rem;">${APP.subtitulo}</bim-label>
       </div>
       ${modelsPanelTemplate(estadoModelos, estatico(estadoModelos))}
       ${arbolPanelTemplate(estadoArbol, estatico(estadoArbol))}

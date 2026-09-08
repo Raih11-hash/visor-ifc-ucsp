@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="./ucsp-escudo.svg" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Visor web de modelos IFC para docencia — UCSP Ingeniería Civil. Abre archivos IFC en el navegador, sin instalar nada." />
   <title>Visor IFC · UCSP</title>
@@ -12,32 +12,6 @@
 
 <body>
   <bim-grid id="app"></bim-grid>
-
-  <!-- Pantalla de bienvenida: guía rápida + versión. Se oculta con el botón
-       o automáticamente si el link trae ?modelo= (ver main.ts). -->
-  <div id="bienvenida" class="bienvenida">
-    <div class="bienvenida-caja">
-      <div class="bienvenida-cabecera">
-        <div class="bienvenida-escudo" aria-hidden="true">UCSP</div>
-        <div>
-          <div class="bienvenida-titulo">Visor IFC · UCSP</div>
-          <div class="bienvenida-subtitulo">Ingeniería Civil — Modelos IFC en tu navegador, sin instalar nada</div>
-        </div>
-      </div>
-      <ol class="bienvenida-pasos">
-        <li>Abre un <b>.ifc</b> con el botón IFC del panel izquierdo, o arrástralo y suéltalo sobre el visor.</li>
-        <li>No tienes un archivo a la mano: carga un <b>modelo de ejemplo</b>.</li>
-        <li><b>Clic</b> selecciona un elemento (mira sus datos a la derecha) · <b>doble clic</b> lo enfoca.</li>
-        <li>Prueba <b>cortar</b>, <b>medir</b>, <b>ocultar</b>, <b>colorear</b> y <b>choques</b> en la barra inferior.</li>
-      </ol>
-      <p id="bienvenida-error" class="bienvenida-error" hidden></p>
-      <div class="bienvenida-pie">
-        <span id="bienvenida-version" class="bienvenida-version"></span>
-        <button id="bienvenida-boton" class="bienvenida-boton" type="button">Comenzar</button>
-      </div>
-    </div>
-  </div>
-
   <script type="module" src="/src/main.ts"></script>
 </body>
 

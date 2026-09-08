@@ -2,8 +2,6 @@
  * toolbars/viewer-toolbar.ts — Barra inferior del viewport.
  *
  * Sección "Visibilidad": mostrar todo + modo fantasma.
- * Sección "Captura": descarga la vista actual como PNG.
- * Sección "Choques": revisión gruesa de traslapes entre modelos.
  * Sección "Selección": enfocar, ocultar, aislar y colorear lo seleccionado.
  */
 
@@ -13,7 +11,6 @@ import * as OBF from "@thatopen/components-front";
 import * as FRAGS from "@thatopen/fragments";
 import * as THREE from "three";
 import { appIcons, tooltips } from "../../globals";
-import { mostrarChoques } from "../../core/choques";
 
 export interface ViewerToolbarState {
   components: OBC.Components;
@@ -31,7 +28,7 @@ const setModelTransparent = (components: OBC.Components) => {
   const materials = [...fragments.core.models.materials.list.values()];
   for (const material of materials) {
     if (material.userData.customId) continue;
-    // Guarda los colores originales para restaurarlos al salir del modo.
+    // save colors
     let color: number | undefined;
     if ("color" in material) {
       color = material.color.getHex();
@@ -45,7 +42,7 @@ const setModelTransparent = (components: OBC.Components) => {
       opacity: material.opacity,
     });
 
-    // Vuelve el material transparente (modo fantasma).
+    // set color
     material.transparent = true;
     material.opacity = 0.05;
     material.needsUpdate = true;
@@ -164,42 +161,12 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
     target.loading = false;
   };
 
-  const onRevisarChoques = () => {
-    mostrarChoques(components, world);
-  };
-
-  const onCapture = () => {
-    const renderer = world.renderer;
-    if (!renderer) return;
-    try {
-      renderer.update();
-    } catch {
-      // Si el render falla, igual se intenta la captura del último frame.
-    }
-    const canvas = renderer.three.domElement as HTMLCanvasElement;
-    const fecha = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
-    const enlace = document.createElement("a");
-    enlace.download = `visor-ucsp-${fecha}.png`;
-    enlace.href = canvas.toDataURL("image/png");
-    enlace.click();
-  };
-
   return BUI.html`
-    <bim-toolbar labels-hidden>
+    <bim-toolbar>
       <bim-toolbar-section label="Visibilidad" icon=${appIcons.SHOW}>
         <bim-button tooltip-title=${tooltips.SHOW_ALL.TITLE} tooltip-text=${tooltips.SHOW_ALL.TEXT} icon=${appIcons.SHOW} label="Mostrar todo" @click=${onShowAll}></bim-button> 
         <bim-button tooltip-title=${tooltips.GHOST.TITLE} tooltip-text=${tooltips.GHOST.TEXT} icon=${appIcons.TRANSPARENT} label="Fantasma" @click=${onToggleGhost}></bim-button>
       </bim-toolbar-section> 
-      <bim-toolbar-section label="Captura" icon=${appIcons.CAMERA}>
-        <bim-button icon=${appIcons.CAMERA} label="Captura" @click=${onCapture}
-          tooltip-title="Capturar imagen"
-          tooltip-text="Descarga una captura PNG de la vista actual (modelo + fondo)."></bim-button>
-      </bim-toolbar-section>
-      <bim-toolbar-section label="Choques" icon=${appIcons.LAYOUT}>
-        <bim-button icon=${appIcons.LAYOUT} label="Revisar choques" @click=${onRevisarChoques}
-          tooltip-title="Revisar choques"
-          tooltip-text="Compara los modelos cargados y lista los que se traslapan (revisión gruesa por volúmenes)."></bim-button>
-      </bim-toolbar-section>
       <bim-toolbar-section label="Selección" icon=${appIcons.SELECT}>
         ${focusBtn}
         <bim-button tooltip-title=${tooltips.HIDE.TITLE} tooltip-text=${tooltips.HIDE.TEXT} icon=${appIcons.HIDE} label="Ocultar" @click=${onHide}></bim-button> 
