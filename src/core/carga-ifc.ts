@@ -12,10 +12,23 @@
 
 import * as OBC from "@thatopen/components";
 import * as FRAGS from "@thatopen/fragments";
-import { APP, RUTAS } from "../globals";
+import { APP, EJEMPLOS, RUTAS } from "../globals";
 import type { MundoPrincipal } from "./mundo";
 
 type MundoEscena = MundoPrincipal["world"];
+
+/** Un modelo de ejemplo disponible en public/models/ (ver EJEMPLOS en globals). */
+export interface OpcionEjemplo {
+  id: string;
+  nombre: string;
+  archivo: string;
+}
+
+const EJEMPLO_UNICO: OpcionEjemplo = {
+  id: EJEMPLOS[0].id,
+  nombre: APP.modeloEjemploNombre,
+  archivo: EJEMPLOS[0].archivo,
+};
 
 export const configurarMotorIfc = async (
   components: OBC.Components,
@@ -76,19 +89,16 @@ export const cargarIfcDesdeBytes = async (
 
 export const cargarModeloEjemplo = async (
   components: OBC.Components,
+  ejemplo: OpcionEjemplo = EJEMPLO_UNICO,
 ): Promise<FRAGS.FragmentsModel> => {
-  const respuesta = await fetch(RUTAS.modeloEjemplo);
+  const respuesta = await fetch(`${RUTAS.carpetaModelos}${ejemplo.archivo}`);
   if (!respuesta.ok) {
     throw new Error(
       `No se pudo descargar el modelo de ejemplo (${respuesta.status}).`,
     );
   }
   const buffer = await respuesta.arrayBuffer();
-  return cargarIfcDesdeBytes(
-    components,
-    new Uint8Array(buffer),
-    APP.modeloEjemploNombre,
-  );
+  return cargarIfcDesdeBytes(components, new Uint8Array(buffer), ejemplo.nombre);
 };
 
 export const activarArrastrarSoltar = (

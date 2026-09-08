@@ -161,12 +161,33 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
     target.loading = false;
   };
 
+  const onCapture = () => {
+    const renderer = world.renderer;
+    if (!renderer) return;
+    try {
+      renderer.update();
+    } catch {
+      // Si el render falla, igual se intenta la captura del último frame.
+    }
+    const canvas = renderer.three.domElement as HTMLCanvasElement;
+    const fecha = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+    const enlace = document.createElement("a");
+    enlace.download = `visor-ucsp-${fecha}.png`;
+    enlace.href = canvas.toDataURL("image/png");
+    enlace.click();
+  };
+
   return BUI.html`
     <bim-toolbar>
       <bim-toolbar-section label="Visibilidad" icon=${appIcons.SHOW}>
         <bim-button tooltip-title=${tooltips.SHOW_ALL.TITLE} tooltip-text=${tooltips.SHOW_ALL.TEXT} icon=${appIcons.SHOW} label="Mostrar todo" @click=${onShowAll}></bim-button> 
         <bim-button tooltip-title=${tooltips.GHOST.TITLE} tooltip-text=${tooltips.GHOST.TEXT} icon=${appIcons.TRANSPARENT} label="Fantasma" @click=${onToggleGhost}></bim-button>
       </bim-toolbar-section> 
+      <bim-toolbar-section label="Captura" icon=${appIcons.CAMERA}>
+        <bim-button icon=${appIcons.CAMERA} label="Captura" @click=${onCapture}
+          tooltip-title="Capturar imagen"
+          tooltip-text="Descarga una captura PNG de la vista actual (modelo + fondo)."></bim-button>
+      </bim-toolbar-section>
       <bim-toolbar-section label="Selección" icon=${appIcons.SELECT}>
         ${focusBtn}
         <bim-button tooltip-title=${tooltips.HIDE.TITLE} tooltip-text=${tooltips.HIDE.TEXT} icon=${appIcons.HIDE} label="Ocultar" @click=${onHide}></bim-button> 

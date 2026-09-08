@@ -195,3 +195,105 @@ bim-grid[floating] .dashboard-card {
   flex-direction: column;
   gap: 0.5rem;
 }
+
+/* --- Pantalla de bienvenida --- */
+.bienvenida {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 12, 16, 0.72);
+  backdrop-filter: blur(3px);
+  transition: opacity 0.35s ease;
+}
+
+.bienvenida.bienvenida-oculta {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bienvenida-caja {
+  width: min(34rem, calc(100vw - 2rem));
+  background: var(--bim-ui_bg-contrast-10);
+  border: 1px solid var(--bim-ui_bg-contrast-40);
+  border-top: 4px solid #b03a2e;
+  border-radius: 0.5rem;
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.bienvenida-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bienvenida-escudo {
+  flex: 0 0 auto;
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #b03a2e;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.bienvenida-titulo {
+  font-size: 1.35rem;
+  font-weight: bold;
+}
+
+.bienvenida-subtitulo {
+  font-size: 0.85rem;
+  color: var(--bim-ui_bg-contrast-80);
+}
+
+.bienvenida-pasos {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--bim-ui_bg-contrast-80);
+}
+
+.bienvenida-pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--bim-ui_bg-contrast-40);
+  padding-top: 1rem;
+}
+
+.bienvenida-version {
+  font-size: 0.8rem;
+  color: var(--bim-ui_bg-contrast-60);
+}
+
+.bienvenida-boton {
+  background: #b03a2e;
+  color: #fff;
+  border: none;
+  border-radius: 0.3rem;
+  padding: 0.55rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bienvenida-boton:hover {
+  filter: brightness(1.12);
+}

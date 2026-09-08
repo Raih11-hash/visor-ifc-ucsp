@@ -4,8 +4,8 @@
  * Lista los modelos cargados en la sesión y ofrece tres formas de agregar:
  * - Botón "IFC": abre el explorador para elegir un .ifc del equipo.
  * - Botón "Fragments": carga un .frag (formato rápido ya convertido).
- * - Botón "Ejemplo": descarga el IFC de ejemplo incluido en la app, para
- *   probar sin tener un archivo a la mano.
+ * - Botones de ejemplo: uno por cada modelo en public/models/ (EJEMPLOS en
+ *   globals.ts), para probar sin tener un archivo a la mano.
  * Además se puede arrastrar un .ifc y soltarlo sobre el visor (ver
  * core/carga-ifc.ts). Incluye buscador para filtrar la lista.
  */
@@ -13,8 +13,12 @@
 import * as BUI from "@thatopen/ui";
 import * as CUI from "@thatopen/ui-obc";
 import * as OBC from "@thatopen/components";
-import { APP, appIcons } from "../../globals";
-import { cargarIfcDesdeBytes, cargarModeloEjemplo } from "../../core/carga-ifc";
+import { appIcons, EJEMPLOS } from "../../globals";
+import {
+  cargarIfcDesdeBytes,
+  cargarModeloEjemplo,
+  type OpcionEjemplo,
+} from "../../core/carga-ifc";
 
 export interface ModelsPanelState {
   components: OBC.Components;
@@ -87,21 +91,24 @@ export const modelsPanelTemplate: BUI.StatefullComponent<ModelsPanelState> = (
       : "var(--bim-ui_grey)";
   };
 
-  const onLoadExample = async ({ target }: { target: BUI.Button }) => {
+  const onLoadExample = async (
+    ejemplo: OpcionEjemplo,
+    { target }: { target: BUI.Button },
+  ) => {
     target.loading = true;
-    mostrarEstado(`Descargando ${APP.modeloEjemploNombre}…`);
+    mostrarEstado(`Descargando ${ejemplo.nombre}…`);
     try {
-      // Evita duplicar el ejemplo si ya está cargado.
+      // Evita duplicar un modelo si ya está cargado.
       const yaCargado = [...fragments.list.values()].some(
-        (modelo) => modelo.modelId === APP.modeloEjemploNombre,
+        (modelo) => modelo.modelId === ejemplo.nombre,
       );
       if (!yaCargado) {
-        await cargarModeloEjemplo(components);
+        await cargarModeloEjemplo(components, ejemplo);
       }
-      mostrarEstado("Modelo de ejemplo listo. ¡Explóralo!");
+      mostrarEstado("Modelo listo. ¡Explóralo!");
     } catch (error) {
       mostrarEstado(
-        error instanceof Error ? error.message : "No se pudo cargar el ejemplo.",
+        error instanceof Error ? error.message : "No se pudo cargar el modelo.",
         true,
       );
     } finally {
@@ -131,9 +138,18 @@ export const modelsPanelTemplate: BUI.StatefullComponent<ModelsPanelState> = (
           </bim-context-menu>
         </bim-button>
       </div>
-      <bim-button style="flex: 0;" label="Cargar ejemplo" icon=${appIcons.EXAMPLE} @click=${onLoadExample}
-        tooltip-title="Modelo de ejemplo" tooltip-text="Descarga un edificio IFC4 de muestra para probar el visor."></bim-button>
-      <bim-label data-estado-modelos style="font-size: 0.75rem;">Sin modelos. Agrega un IFC, suelta un archivo sobre el visor o carga el ejemplo.</bim-label>
+      <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+        ${EJEMPLOS.map(
+          (ejemplo) => BUI.html`
+          <bim-button style="flex: 0;" label=${ejemplo.nombre} icon=${appIcons.EXAMPLE}
+            @click=${(evento: { target: BUI.Button }) =>
+              onLoadExample(ejemplo, evento)}
+            tooltip-title="Modelo de ejemplo"
+            tooltip-text="Descarga un IFC de muestra para probar el visor sin archivos."></bim-button>
+        `,
+        )}
+      </div>
+      <bim-label data-estado-modelos style="font-size: 0.75rem;">Sin modelos. Agrega un IFC, suelta un archivo sobre el visor o carga un ejemplo.</bim-label>
       ${modelsList}
     </bim-panel-section>
   `;

@@ -19,8 +19,16 @@ const urlAbsoluta = (relativa: string) =>
 export const APP = {
   titulo: "Visor IFC",
   subtitulo: "UCSP · Ingeniería Civil",
+  version: "1.1",
   modeloEjemploNombre: "Edificio ejemplo (IFC4)",
 } as const;
+
+/** Modelos de ejemplo incluidos en public/models/. Para agregar uno propio
+ * de clase (p. ej. graderías): suelta el .ifc en public/models/ y añade una
+ * línea aquí con su id, nombre y archivo. El link ?modelo=<id> lo abre directo. */
+export const EJEMPLOS = [
+  { id: "ejemplo", nombre: "Edificio ejemplo (IFC4)", archivo: "ejemplo.ifc" },
+] as const;
 
 export const RUTAS = {
   /** Worker de @thatopen/fragments, copiado en public/. Imprescindible en
@@ -31,6 +39,8 @@ export const RUTAS = {
   carpetaWasm: urlAbsoluta(`${base}wasm/`),
   /** Modelo IFC de ejemplo (buildingSMART, IFC4) para probar sin archivos. */
   modeloEjemplo: `${base}models/ejemplo.ifc`,
+  /** Carpeta de modelos de ejemplo (para ?modelo= y botones múltiples). */
+  carpetaModelos: `${base}models/`,
 } as const;
 
 export const CONTENT_GRID_ID = "app-content";

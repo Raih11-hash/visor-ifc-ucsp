@@ -42,7 +42,11 @@ export const crearMundo = (components: OBC.Components): MundoPrincipal => {
     return BUI.html`<bim-viewport></bim-viewport>`;
   });
 
-  world.renderer = new OBF.PostproductionRenderer(components, viewport);
+  world.renderer = new OBF.PostproductionRenderer(components, viewport, {
+    // Permite leer el canvas con toDataURL() (botón "Captura") sin depender
+    // del momento del frame. Costo mínimo de memoria.
+    preserveDrawingBuffer: true,
+  });
   world.camera = new OBC.OrthoPerspectiveCamera(components);
   world.camera.threePersp.near = 0.01;
   world.camera.threePersp.updateProjectionMatrix();

@@ -21,9 +21,13 @@
 import * as OBC from "@thatopen/components";
 import * as BUI from "@thatopen/ui";
 import * as TEMPLATES from "./ui-templates";
-import { APP, CONTENT_GRID_ID } from "./globals";
+import { APP, CONTENT_GRID_ID, EJEMPLOS } from "./globals";
 import { crearMundo } from "./core/mundo";
-import { activarArrastrarSoltar, configurarMotorIfc } from "./core/carga-ifc";
+import {
+  activarArrastrarSoltar,
+  cargarModeloEjemplo,
+  configurarMotorIfc,
+} from "./core/carga-ifc";
 import { configurarCorteYMedicion, configurarResaltado } from "./core/interaccion";
 import { viewportSettingsTemplate } from "./ui-templates/buttons/viewport-settings";
 
@@ -137,3 +141,32 @@ app.layouts = {
 app.layout = "App";
 
 document.title = `${APP.titulo} · UCSP`;
+
+// --- Pantalla de bienvenida (versión, guía rápida, ?modelo=) ---
+const bienvenida = document.getElementById("bienvenida");
+const versionEl = document.getElementById("bienvenida-version");
+if (versionEl) {
+  versionEl.textContent = `Versión ${APP.version}`;
+}
+
+const ocultarBienvenida = () => {
+  if (!bienvenida) return;
+  bienvenida.classList.add("bienvenida-oculta");
+  setTimeout(() => bienvenida.remove(), 400);
+};
+
+document
+  .getElementById("bienvenida-boton")
+  ?.addEventListener("click", ocultarBienvenida);
+
+// Link ?modelo=<id> (ver EJEMPLOS): abre el ejemplo elegido ya cargado.
+const modeloPid = new URLSearchParams(window.location.search).get("modelo");
+const ejemploPedido = EJEMPLOS.find((ejemplo) => ejemplo.id === modeloPid);
+if (ejemploPedido) {
+  try {
+    await cargarModeloEjemplo(components, ejemploPedido);
+    ocultarBienvenida();
+  } catch {
+    // Si el modelo no carga, la bienvenida se queda para elegir otro.
+  }
+}
