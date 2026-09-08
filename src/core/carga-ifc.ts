@@ -54,7 +54,8 @@ export const configurarMotorIfc = async (
     fragments.core.update(true);
   });
 
-  // Cada modelo cargado (por botón, arrastre o ejemplo) aparece en escena.
+  // Cada modelo cargado (por botón, arrastre o ejemplo) aparece en escena
+  // y la cámara lo encuadra automáticamente.
   fragments.list.onItemSet.add(async ({ value: modelo }) => {
     modelo.useCamera(world.camera.three);
     modelo.getClippingPlanesEvent = () => {
@@ -62,6 +63,14 @@ export const configurarMotorIfc = async (
     };
     world.scene.three.add(modelo.object);
     await fragments.core.update(true);
+    // Auto-encuadre de cortesía (no debe romper la carga si falla).
+    try {
+      if (world.camera instanceof OBC.SimpleCamera) {
+        await world.camera.fitToItems();
+      }
+    } catch {
+      // La cámara queda donde estaba; el alumno la ajusta a mano.
+    }
   });
 
   const ifcLoader = components.get(OBC.IfcLoader);

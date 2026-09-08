@@ -3,6 +3,7 @@
  *
  * Sección "Visibilidad": mostrar todo + modo fantasma.
  * Sección "Captura": descarga la vista actual como PNG.
+ * Sección "Choques": revisión gruesa de traslapes entre modelos.
  * Sección "Selección": enfocar, ocultar, aislar y colorear lo seleccionado.
  */
 
@@ -12,6 +13,7 @@ import * as OBF from "@thatopen/components-front";
 import * as FRAGS from "@thatopen/fragments";
 import * as THREE from "three";
 import { appIcons, tooltips } from "../../globals";
+import { mostrarChoques } from "../../core/choques";
 
 export interface ViewerToolbarState {
   components: OBC.Components;
@@ -162,6 +164,10 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
     target.loading = false;
   };
 
+  const onRevisarChoques = () => {
+    mostrarChoques(components, world);
+  };
+
   const onCapture = () => {
     const renderer = world.renderer;
     if (!renderer) return;
@@ -188,6 +194,11 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
         <bim-button icon=${appIcons.CAMERA} label="Captura" @click=${onCapture}
           tooltip-title="Capturar imagen"
           tooltip-text="Descarga una captura PNG de la vista actual (modelo + fondo)."></bim-button>
+      </bim-toolbar-section>
+      <bim-toolbar-section label="Choques" icon=${appIcons.LAYOUT}>
+        <bim-button icon=${appIcons.LAYOUT} label="Revisar choques" @click=${onRevisarChoques}
+          tooltip-title="Revisar choques"
+          tooltip-text="Compara los modelos cargados y lista los que se traslapan (revisión gruesa por volúmenes)."></bim-button>
       </bim-toolbar-section>
       <bim-toolbar-section label="Selección" icon=${appIcons.SELECT}>
         ${focusBtn}

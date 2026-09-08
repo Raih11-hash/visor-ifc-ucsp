@@ -22,10 +22,12 @@ página, se mira aquí primero.
 - **`carga-ifc.ts`**: el motor de archivos.
   - `configurarMotorIfc()` arranca fragments (worker autoalojado) y el
     lector IFC (WASM autoalojado, sin CDN). Cada modelo cargado entra
-    solo a la escena.
+    solo a la escena y la cámara lo encuadra (`fitToItems`).
   - `cargarIfcDesdeBytes()` convierte bytes `.ifc` en modelo 3D.
-  - `cargarModeloEjemplo()` descarga el edificio de muestra (buildingSMART).
+  - `cargarModeloEjemplo()` descarga el IFC de ejemplo incluido en la app.
   - `activarArrastrarSoltar()` abre un `.ifc` soltado sobre el visor.
+- **`choques.ts`**: revisión gruesa de choques entre modelos (cajas
+  envolventes por pares + diálogo con "Enfocar" por choque).
 - **`interaccion.ts`**:
   - `configurarResaltado()` pinta la selección en verde (alimenta el panel
     de propiedades).
@@ -51,7 +53,7 @@ página, se mira aquí primero.
   con buscador y exportación a TSV (abre en Excel).
 - **`sections/viewpoints.ts`**: guarda vistas de cámara para retomar en clase.
 - **`toolbars/viewer-toolbar.ts`**: mostrar todo, fantasma, captura PNG,
-  enfocar, ocultar, aislar, colorear.
+  choques entre modelos, enfocar, ocultar, aislar, colorear.
 - **`buttons/viewport-settings.ts`**: grilla sí/no y tipo de proyección.
 - **`globals.ts`**: textos en español, iconos, rutas (`RUTAS`), versión
   (`APP.version`, visible en bienvenida e insignia lateral) y lista

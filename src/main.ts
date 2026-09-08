@@ -161,12 +161,29 @@ document
 
 // Link ?modelo=<id> (ver EJEMPLOS): abre el ejemplo elegido ya cargado.
 const modeloPid = new URLSearchParams(window.location.search).get("modelo");
-const ejemploPedido = EJEMPLOS.find((ejemplo) => ejemplo.id === modeloPid);
-if (ejemploPedido) {
-  try {
-    await cargarModeloEjemplo(components, ejemploPedido);
-    ocultarBienvenida();
-  } catch {
-    // Si el modelo no carga, la bienvenida se queda para elegir otro.
+const mostrarErrorBienvenida = (texto: string) => {
+  const errorEl = document.getElementById("bienvenida-error");
+  if (!errorEl) return;
+  errorEl.textContent = texto;
+  errorEl.hidden = false;
+};
+if (modeloPid) {
+  const ejemploPedido = EJEMPLOS.find((ejemplo) => ejemplo.id === modeloPid);
+  if (!ejemploPedido) {
+    // El id no existe: la bienvenida se queda y dice cuáles sí existen.
+    const ids = EJEMPLOS.map((ejemplo) => ejemplo.id).join(", ");
+    mostrarErrorBienvenida(
+      `No hay ningún modelo con id "${modeloPid}". Prueba con: ${ids}.`,
+    );
+  } else {
+    try {
+      await cargarModeloEjemplo(components, ejemploPedido);
+      ocultarBienvenida();
+    } catch (error) {
+      // Si el modelo no carga, la bienvenida se queda y explica por qué.
+      mostrarErrorBienvenida(
+        error instanceof Error ? error.message : "No se pudo cargar el modelo.",
+      );
+    }
   }
 }

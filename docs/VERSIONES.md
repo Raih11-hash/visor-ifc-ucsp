@@ -4,6 +4,23 @@ Convención: cada cambio visible y probado sube la versión (1.0 → 1.1 → 1.2
 → 1.9 → 2.0). En git, cada versión publicada lleva su etiqueta (`git tag v1.1`).
 Para volver a una versión anterior: `git checkout v1.0` (o desplegar su commit).
 
+## v1.3 (2026-09-08)
+- Auto-encuadre: cada modelo cargado (botón, arrastre, ejemplo, `?modelo=`)
+  deja la cámara encuadrando todo (`fitToItems` en `carga-ifc.ts`).
+- Botón "Revisar choques" (barra inferior): compara las cajas envolventes
+  de los modelos cargados y lista los pares que se traslapan, con botón
+  "Enfocar" por choque (`core/choques.ts` + diálogo propio). Revisión
+  gruesa por volúmenes, no reemplaza un Clash Detective.
+- `?modelo=` con id inexistente o que falla al descargar ahora muestra el
+  motivo en la bienvenida (antes quedaba en silencio).
+- Favicon propio (escudo UCSP) en vez del `vite.svg` del template.
+- Build: motor 3D separado en chunk `vendor` (caché entre despliegues;
+  la primera descarga sigue ~1 MB con gzip de Vercel).
+- `npm run lint` agregado. Estado: la cadena eslint del template está rota
+  de origen (el parser 7.2.0 se estrella en `scope-manager` por un
+  `visitor-keys` 1.4.0 colado en `node_modules`); `tsc` sigue siendo la
+  puerta de calidad que sí pasa.
+
 ## v1.2.1 (2026-09-08) — limpieza interna, sin cambios visibles
 - `viewer-toolbar.ts`: cabecera al día (sección "Captura") y comentarios
   al español.
