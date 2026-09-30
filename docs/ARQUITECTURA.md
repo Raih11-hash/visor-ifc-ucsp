@@ -1,4 +1,6 @@
-# Visor IFC · UCSP — Descripción de cada parte
+# Visor IFC · UCSP — arquitectura histórica v1.0
+
+> Para la v2.0 en rama/preview, consulta [ARQUITECTURA_V2_RV2.md](ARQUITECTURA_V2_RV2.md). Lo siguiente documenta exclusivamente la base v1.0 congelada, no el stack ni el tamaño de la v2.0.
 
 Visor web de modelos IFC para docencia (Ingeniería Civil, UCSP).
 Stack: Vite 7 + TypeScript estricto + ThatOpen Engine 3.2.0 (open-source).

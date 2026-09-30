@@ -17,6 +17,7 @@ const urlAbsoluta = (relativa: string) =>
   new URL(relativa, document.baseURI).href;
 
 export const APP = {
+  version: "2.0.0",
   titulo: "Visor IFC",
   subtitulo: "UCSP · Ingeniería Civil",
   modeloEjemploNombre: "Edificio ejemplo (IFC4)",
@@ -32,6 +33,11 @@ export const RUTAS = {
   /** Modelo IFC de ejemplo (buildingSMART, IFC4) para probar sin archivos. */
   modeloEjemplo: `${base}models/ejemplo.ifc`,
 } as const;
+
+export const EJEMPLOS = [
+  { id: "ejemplo", nombre: "Edificio ejemplo (IFC4)", archivo: "ejemplo.ifc" },
+  { id: "graderias", nombre: "Graderías", archivo: "graderias.ifc" },
+] as const;
 
 export const CONTENT_GRID_ID = "app-content";
 

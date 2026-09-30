@@ -38,10 +38,10 @@ export const viewportSettingsTemplate: BUI.StatefullComponent<
     `;
   }
 
-  const onProjectionChange = ({ target }: { target: BUI.Dropdown }) => {
+  const onProjectionChange = async ({ target }: { target: BUI.Dropdown }) => {
     const [projection] = target.value;
-    if (!projection) return;
-    world.camera.projection.set(projection);
+    if (projection !== "Perspective" && projection !== "Orthographic") return;
+    await world.camera.projection.set(projection);
     world.renderer?.postproduction.updateCamera();
   };
 
@@ -50,8 +50,8 @@ export const viewportSettingsTemplate: BUI.StatefullComponent<
       <bim-context-menu style="width: 15rem; gap: 0.25rem">
         ${worldEnableCheckbox}
         <bim-dropdown label="Proyección de cámara" @change=${onProjectionChange}>
-          <bim-option label="Perspectiva" ?checked=${world.camera.projection.current === "Perspective"}></bim-option> 
-          <bim-option label="Ortográfica" ?checked=${world.camera.projection.current === "Orthographic"}></bim-option> 
+          <bim-option label="Perspectiva" value="Perspective" ?checked=${world.camera.projection.current === "Perspective"}></bim-option>
+          <bim-option label="Ortográfica" value="Orthographic" ?checked=${world.camera.projection.current === "Orthographic"}></bim-option>
         </bim-dropdown>
       </bim-context-menu> 
     </bim-button>

@@ -12,10 +12,45 @@
 
 import * as OBC from "@thatopen/components";
 import * as FRAGS from "@thatopen/fragments";
-import { APP, RUTAS } from "../globals";
+import { EJEMPLOS, RUTAS } from "../globals";
+import { validateModelBytes, MAX_MODEL_BYTES, withTimeout } from "../domain/runtime";
+import { avisar } from "../ui/feedback";
 import type { MundoPrincipal } from "./mundo";
 
 type MundoEscena = MundoPrincipal["world"];
+const loading = new WeakSet<OBC.Components>();
+const unavailable = new WeakSet<OBC.Components>();
+
+export async function cargarArchivoDesdeBytes(components: OBC.Components, datos: Uint8Array, nombreArchivo: string, etiqueta?: string): Promise<FRAGS.FragmentsModel> {
+  validateModelBytes(datos,nombreArchivo);
+  if(unavailable.has(components)) throw new Error('El lector quedó detenido. Recarga la página antes de reintentar.');
+  if(loading.has(components)) throw new Error('Ya hay un modelo abriéndose. Espera a que termine.');
+  loading.add(components);
+  const fragments=components.get(OBC.FragmentsManager);
+  const base=etiqueta || nombreArchivo.replace(/\.(ifc|frag)$/i,'');
+  let name=base;let suffix=2;
+  while(fragments.list.has(name)) name=`${base} (${suffix++})`;
+  const before=new Set(fragments.list.keys());
+  let finished=false;
+  try {
+    avisar(`Leyendo y convirtiendo ${nombreArchivo}…`);
+    const operation=/\.ifc$/i.test(nombreArchivo)
+      ? components.get(OBC.IfcLoader).load(datos,true,name)
+      : fragments.core.load(datos,{modelId:name});
+    void operation.then(async model=>{if(unavailable.has(components) && !finished) await fragments.core.disposeModel(model.modelId);}).catch(()=>{});
+    const model=await withTimeout(operation,120000,'La conversión superó dos minutos. Recarga la página para reiniciar el lector; no se da el modelo por cargado.');
+    finished=true;avisar(`Modelo listo: ${nombreArchivo}`);return model;
+  } catch(error) {
+    if(error instanceof Error && error.message.includes('superó dos minutos')) unavailable.add(components);
+    for(const id of fragments.list.keys()) if(!before.has(id)) await fragments.core.disposeModel(id).catch(()=>{});
+    throw error;
+  } finally { loading.delete(components); }
+}
+
+export async function cargarArchivo(components:OBC.Components, file:File):Promise<FRAGS.FragmentsModel> {
+  if(file.size>MAX_MODEL_BYTES)throw new Error('El archivo supera el límite de 100 MB por modelo.');
+  return cargarArchivoDesdeBytes(components,new Uint8Array(await file.arrayBuffer()),file.name);
+}
 
 export const configurarMotorIfc = async (
   components: OBC.Components,
@@ -69,25 +104,29 @@ export const cargarIfcDesdeBytes = async (
   datos: Uint8Array,
   nombreArchivo: string,
 ): Promise<FRAGS.FragmentsModel> => {
-  const ifcLoader = components.get(OBC.IfcLoader);
-  const nombre = nombreArchivo.replace(/\.ifc$/i, "");
-  return ifcLoader.load(datos, true, nombre);
+  return cargarArchivoDesdeBytes(components,datos,nombreArchivo);
 };
 
 export const cargarModeloEjemplo = async (
   components: OBC.Components,
+  id = "ejemplo",
 ): Promise<FRAGS.FragmentsModel> => {
-  const respuesta = await fetch(RUTAS.modeloEjemplo);
+  const ejemplo=EJEMPLOS.find(item=>item.id===id);
+  if(!ejemplo)throw new Error('Modelo de ejemplo desconocido.');
+  const already=components.get(OBC.FragmentsManager).list.get(ejemplo.nombre);
+  if(already)return already;
+  const respuesta = await fetch(new URL(`models/${ejemplo.archivo}`, new URL(import.meta.env.BASE_URL,document.baseURI)),{signal:AbortSignal.timeout(30000)});
   if (!respuesta.ok) {
     throw new Error(
       `No se pudo descargar el modelo de ejemplo (${respuesta.status}).`,
     );
   }
   const buffer = await respuesta.arrayBuffer();
-  return cargarIfcDesdeBytes(
+  return cargarArchivoDesdeBytes(
     components,
     new Uint8Array(buffer),
-    APP.modeloEjemploNombre,
+    ejemplo.archivo,
+    ejemplo.nombre,
   );
 };
 
@@ -101,15 +140,14 @@ export const activarArrastrarSoltar = (
   elemento.addEventListener("drop", async (evento) => {
     evento.preventDefault();
     const archivo = Array.from(evento.dataTransfer?.files ?? []).find((f) =>
-      /\.ifc$/i.test(f.name),
+      /\.(ifc|frag)$/i.test(f.name),
     );
     if (!archivo) {
-      alFallar?.("Suelta un archivo con extensión .ifc");
+      alFallar?.("Suelta un archivo con extensión .ifc o .frag");
       return;
     }
     try {
-      const bytes = new Uint8Array(await archivo.arrayBuffer());
-      await cargarIfcDesdeBytes(components, bytes, archivo.name);
+      await cargarArchivo(components, archivo);
       alTerminar?.(archivo.name);
     } catch (error) {
       alFallar?.(

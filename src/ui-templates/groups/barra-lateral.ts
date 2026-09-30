@@ -41,12 +41,13 @@ export const barraLateralTemplate: BUI.StatefullComponent<BarraLateralState> = (
   const estadoVistas: ViewpointsPanelState = { components, world };
 
   return BUI.html`
-    <div style="display: flex; flex-direction: column; gap: 1rem; overflow-y: auto; height: 100%; padding: 0 0.25rem;">
+    <div class="lab-sidebar" style="display: flex; flex-direction: column; gap: 1rem; overflow-y: auto; height: 100%; padding: 0 0.25rem;">
       <div>
         <bim-label style="font-size: 1.1rem; font-weight: bold;">${APP.titulo}</bim-label>
         <bim-label style="font-size: 0.8rem;">${APP.subtitulo}</bim-label>
       </div>
       ${modelsPanelTemplate(estadoModelos, estatico(estadoModelos))}
+      <div id="workspace-host"></div>
       ${arbolPanelTemplate(estadoArbol, estatico(estadoArbol))}
       ${viewpointsPanelTemplate(estadoVistas, estatico(estadoVistas))}
     </div>

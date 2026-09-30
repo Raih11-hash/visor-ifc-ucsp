@@ -4,6 +4,18 @@ Convención: cada cambio visible y probado sube la versión (1.0 → 1.1 → 1.2
 → 1.9 → 2.0). En git, cada versión publicada lleva su etiqueta (`git tag v1.1`).
 Para volver a una versión anterior: `git checkout v1.0` (o desplegar su commit).
 
+## v2.0 (rama/preview; todavía no sustituye v1.0)
+
+- Motor compatible fijado y recursos Worker/WASM autoalojados verificables; inicio inmediato, error/reintento y validación temprana de IFC/FRAG.
+- Tablero de elementos con geometría, filtros combinados, selección/aislamiento, consultas y CSV protegido contra fórmulas.
+- Revisión explícita de presencia/igualdad, motivos, selección de fallos, colores (cualquier fallo prevalece) y CSV. No certifica IDS/EIR/LOD.
+- Sesiones IndexedDB y JSON con modelos FRAG reales/SHA-256, cámara/proyección, filtros, consultas, reglas, selección, ocultos, colores y vistas de cámara. No guarda cortes/medidas/fantasma.
+- Propiedades de ocurrencia prevalecen sobre las del tipo; contraste automatizado de nivel/Pset/cantidad con IFC fuente.
+- Base verificada localmente: 105 pruebas Node sin omisiones, 55 comprobaciones Playwright, compilación TypeScript/Vite y ambas auditorías npm sin vulnerabilidades. Evidencia reproducible en `scripts/smoke_v2.py`; el paquete 3D sigue siendo grande y falta validación humana en equipo de alumno.
+- Arquitectura actual en `ARQUITECTURA_V2_RV2.md`. La revisión independiente y la publicación de preview se registran por separado; estos resultados locales no prueban despliegue.
+
+> Las v1.1–v1.3.1 siguientes fueron revertidas; sus funciones no describen la producción v1.0 congelada.
+
 ## v1.3.1 (2026-09-08)
 - Cartel instantáneo: "Comenzar" cierra al toque (sin esperar animación) y
   con `?modelo=` el modelo carga en segundo plano; si falla, el cartel se

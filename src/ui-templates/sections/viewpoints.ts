@@ -10,6 +10,8 @@ import * as BUI from "@thatopen/ui";
 import * as CUI from "@thatopen/ui-obc";
 import * as OBC from "@thatopen/components";
 import * as OBF from "@thatopen/components-front";
+import * as THREE from "three";
+import { avisar, mensajeError } from "../../ui/feedback";
 import { appIcons } from "../../globals";
 
 export interface ViewpointsPanelState {
@@ -26,12 +28,18 @@ export const viewpointsPanelTemplate: BUI.StatefullComponent<
 
   const onCreate = async ({ target }: { target: BUI.Button }) => {
     target.loading = true;
+    try {
     const manager = components.get(OBC.Viewpoints);
     const highlighter = components.get(OBF.Highlighter);
     const fragments = components.get(OBC.FragmentsManager);
 
     const viewpoint = manager.create();
     viewpoint.world = world ?? null;
+    if(world?.camera instanceof OBC.OrthoPerspectiveCamera) {
+      const eye=world.camera.three.position;
+      const aim=world.camera.controls.getTarget(new THREE.Vector3());
+      viewpoint.customData.sessionCamera={eye:eye.toArray(),target:aim.toArray(),projection:world.camera.projection.current};
+    }
     await viewpoint.updateCamera();
 
     // Guarda los elementos seleccionados dentro de la vista.
@@ -50,7 +58,8 @@ export const viewpointsPanelTemplate: BUI.StatefullComponent<
       viewpoint.componentColors.set(definition.color.getHexString(), guids);
     }
 
-    target.loading = false;
+    } catch(error) {avisar(mensajeError(error),true);}
+    finally {target.loading = false;}
   };
 
   return BUI.html`

@@ -14,7 +14,8 @@ import * as BUI from "@thatopen/ui";
 import * as CUI from "@thatopen/ui-obc";
 import * as OBC from "@thatopen/components";
 import { APP, appIcons } from "../../globals";
-import { cargarIfcDesdeBytes, cargarModeloEjemplo } from "../../core/carga-ifc";
+import { cargarArchivo, cargarModeloEjemplo } from "../../core/carga-ifc";
+import { avisar, mensajeError } from "../../ui/feedback";
 
 export interface ModelsPanelState {
   components: OBC.Components;
@@ -41,40 +42,40 @@ export const modelsPanelTemplate: BUI.StatefullComponent<ModelsPanelState> = (
     input.type = "file";
     input.multiple = false;
     input.accept = accept;
+    input.dataset.modelUpload = accept === '.ifc' ? 'ifc' : 'frag';
+    input.hidden = true;
+    document.body.append(input);
     input.addEventListener("change", async () => {
       const file = input.files?.[0];
       if (!file) return;
       boton.loading = true;
       try {
         await alElegir(file);
+      } catch(error) {
+        avisar(mensajeError(error),true);
+        mostrarEstado(mensajeError(error),true);
       } finally {
         boton.loading = false;
         BUI.ContextMenu.removeMenus();
+        input.remove();
       }
     });
     input.addEventListener("cancel", () => {
       boton.loading = false;
+      input.remove();
     });
     input.click();
   };
 
   const onAddIfcModel = ({ target }: { target: BUI.Button }) => {
     abrirSelector(".ifc", async (file) => {
-      const buffer = await file.arrayBuffer();
-      await cargarIfcDesdeBytes(
-        components,
-        new Uint8Array(buffer),
-        file.name,
-      );
+      await cargarArchivo(components,file);
     }, target);
   };
 
   const onAddFragmentsModel = ({ target }: { target: BUI.Button }) => {
     abrirSelector(".frag", async (file) => {
-      const buffer = await file.arrayBuffer();
-      await fragments.core.load(new Uint8Array(buffer), {
-        modelId: file.name.replace(/\.frag$/i, ""),
-      });
+      await cargarArchivo(components,file);
     }, target);
   };
 
@@ -109,6 +110,13 @@ export const modelsPanelTemplate: BUI.StatefullComponent<ModelsPanelState> = (
     }
   };
 
+  const onGraderias = async ({ target }: { target: BUI.Button }) => {
+    target.loading=true;mostrarEstado('Descargando Graderías…');
+    try {await cargarModeloEjemplo(components,'graderias');mostrarEstado('Graderías listas.');}
+    catch(error){mostrarEstado(mensajeError(error),true);avisar(mensajeError(error),true);}
+    finally{target.loading=false;}
+  };
+
   const onSearch = (e: Event) => {
     const input = e.target as BUI.TextInput;
     modelsList.queryString = input.value;
@@ -134,6 +142,7 @@ export const modelsPanelTemplate: BUI.StatefullComponent<ModelsPanelState> = (
       <bim-button style="flex: 0;" label="Cargar ejemplo" icon=${appIcons.EXAMPLE} @click=${onLoadExample}
         tooltip-title="Modelo de ejemplo" tooltip-text="Descarga un edificio IFC4 de muestra para probar el visor."></bim-button>
       <bim-label data-estado-modelos style="font-size: 0.75rem;">Sin modelos. Agrega un IFC, suelta un archivo sobre el visor o carga el ejemplo.</bim-label>
+      <bim-button style="flex: 0;" label="Cargar Graderías" icon=${appIcons.EXAMPLE} @click=${onGraderias}></bim-button>
       ${modelsList}
     </bim-panel-section>
   `;
