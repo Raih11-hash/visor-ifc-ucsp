@@ -13,7 +13,7 @@
 import * as OBC from "@thatopen/components";
 import * as FRAGS from "@thatopen/fragments";
 import { EJEMPLOS, RUTAS } from "../globals";
-import { validateModelBytes, MAX_MODEL_BYTES, withTimeout } from "../domain/runtime";
+import { validateModelBytes, MAX_MODEL_BYTES, withTimeout, modelBytesEqual } from "../domain/runtime";
 import { avisar } from "../ui/feedback";
 import type { MundoPrincipal } from "./mundo";
 
@@ -33,6 +33,13 @@ export async function cargarArchivoDesdeBytes(components: OBC.Components, datos:
   const before=new Set(fragments.list.keys());
   let finished=false;
   try {
+    if(/\.frag$/i.test(nombreArchivo)) {
+      for(const existing of fragments.list.values()) {
+        if(modelBytesEqual(datos,await withTimeout(existing.getBuffer(false),30000,'No se pudo comprobar el modelo ya abierto. No se añadió el FRAG; vuelve a intentarlo.'))) {
+          throw new Error(`Este FRAG ya está cargado como «${existing.modelId}». No se añadió otra copia para proteger las sesiones. Puedes seguir trabajando con el modelo abierto.`);
+        }
+      }
+    }
     avisar(`Leyendo y convirtiendo ${nombreArchivo}…`);
     const operation=/\.ifc$/i.test(nombreArchivo)
       ? components.get(OBC.IfcLoader).load(datos,true,name)

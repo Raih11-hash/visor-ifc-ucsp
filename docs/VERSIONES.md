@@ -11,7 +11,8 @@ Para volver a una versión anterior: `git checkout v1.0` (o desplegar su commit)
 - Revisión explícita de presencia/igualdad, motivos, selección de fallos, colores (cualquier fallo prevalece) y CSV. No certifica IDS/EIR/LOD.
 - Sesiones IndexedDB y JSON con modelos FRAG reales/SHA-256, cámara/proyección, filtros, consultas, reglas, selección, ocultos, colores y vistas de cámara. No guarda cortes/medidas/fantasma.
 - Propiedades de ocurrencia prevalecen sobre las del tipo; contraste automatizado de nivel/Pset/cantidad con IFC fuente.
-- Base verificada localmente: 105 pruebas Node sin omisiones, 55 comprobaciones Playwright, compilación TypeScript/Vite y ambas auditorías npm sin vulnerabilidades. Evidencia reproducible en `scripts/smoke_v2.py`; el paquete 3D sigue siendo grande y falta validación humana en equipo de alumno.
+- Base verificada localmente (RV3): 106 pruebas Node sin omisiones, 62 comprobaciones Playwright, compilación TypeScript/Vite y ambas auditorías npm sin vulnerabilidades. Evidencia reproducible en `scripts/smoke_v2.py`; el paquete 3D sigue siendo grande y falta validación humana en equipo de alumno.
+- RV3: se rechaza un FRAG idéntico a otro ya abierto antes de añadirlo; mensaje visible y sesión actual intacta. Dos cargas del mismo IFC se probaron como instancias distintas, con guardado, recarga y restauración completos. Detalle en `CIERRE_CALIDAD_V2_RV3.md`.
 - Arquitectura actual en `ARQUITECTURA_V2_RV2.md`. La revisión independiente y la publicación de preview se registran por separado; estos resultados locales no prueban despliegue.
 
 > Las v1.1–v1.3.1 siguientes fueron revertidas; sus funciones no describen la producción v1.0 congelada.

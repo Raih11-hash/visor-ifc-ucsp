@@ -4,6 +4,16 @@ import fs from 'node:fs';
 
 const url = new URL('../src/domain/runtime.ts', import.meta.url);
 
+test('la comparación de FRAG idénticos respeta subarrays sin modificar bytes', async () => {
+  const { modelBytesEqual } = await import(url.href);
+  const bytes=new Uint8Array([99,1,2,3,88]);
+  const part=bytes.subarray(1,4);
+  assert.equal(modelBytesEqual(part,new Uint8Array([1,2,3]).buffer),true);
+  assert.equal(modelBytesEqual(part,new Uint8Array([1,2,4])),false);
+  assert.equal(modelBytesEqual(part,new Uint8Array([1,2])),false);
+  assert.deepEqual([...bytes],[99,1,2,3,88]);
+});
+
 test('el módulo de robustez valida cabeceras IFC antes de invocar WASM', async () => {
   assert.ok(fs.existsSync(url), 'Falta la validación robusta de archivos');
   const { validateModelBytes } = await import(url.href);
