@@ -4,6 +4,14 @@ Convención: cada cambio visible y probado sube la versión (1.0 → 1.1 → 1.2
 → 1.9 → 2.0). En git, cada versión publicada lleva su etiqueta (`git tag v1.1`).
 Para volver a una versión anterior: `git checkout v1.0` (o desplegar su commit).
 
+## v2.1 (preview RV4; producción v1.0 intacta)
+
+- Encuadres sin PNG obligatorio, cámara actualizada coherente con sesión, nombres/acciones en español y errores/timeouts sin filas incompletas.
+- Navegación directa, paneles montados, lateral ajustable, propiedades plegables liberando ancho, presentación y móvil con un solo panel superpuesto.
+- Estado de cambios sin guardar y guardado visible/verificado; exportar JSON no equivale a guardar localmente. Lee sesiones 2.0 y 2.1; esquema 2 sin cambios.
+- Verificación local: 108 Node sin omisiones, 63 comprobaciones base, 28 vistas/guardado y 46 layout; build y auditorías npm correctos. Medición local comparable y límites en `CIERRE_UX_VISTAS_RV4.md`.
+- Sin merge, tag o release; revisión/deployment se registran por separado. Falta validación humana y acceso al preview autenticado.
+
 ## v2.0 (rama/preview; todavía no sustituye v1.0)
 
 - Motor compatible fijado y recursos Worker/WASM autoalojados verificables; inicio inmediato, error/reintento y validación temprana de IFC/FRAG.

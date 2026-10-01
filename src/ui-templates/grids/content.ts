@@ -28,6 +28,25 @@ export type ContentGridElements = [Visor, Lateral, DatosElemento];
 
 export type ContentGridLayouts = ["Visor"];
 
+/**
+ * Envuelve el panel del padre en un contenedor con id/estado estables para
+ * poder plegarlo y ocultarlo (presentación/móvil) sin desmontarlo. El panel
+ * se monta una sola vez y conserva su estado.
+ */
+const propiedadesTemplate: BUI.StatefullComponent<
+  TEMPLATES.ElementsDataPanelState
+> = (state, update) =>
+  BUI.html`
+    <div id="panel-propiedades" class="layout-properties">
+      <div class="layout-panel-tools">
+        <button id="toggle-properties" type="button" class="layout-btn" aria-expanded="true"
+          aria-controls="panel-propiedades-body" aria-label="Contraer panel de propiedades">Propiedades</button>
+      </div>
+      <div id="panel-propiedades-body" class="layout-properties-body">
+        ${TEMPLATES.elementsDataPanelTemplate(state, update)}
+      </div>
+    </div>`;
+
 export interface ContentGridState {
   components: OBC.Components;
   world?: OBC.World;
@@ -50,9 +69,9 @@ export const contentGridTemplate: BUI.StatefullComponent<ContentGridState> = (
         initialState: { components, world },
       },
       datosElemento: {
-        template: TEMPLATES.elementsDataPanelTemplate,
-        initialState: { components },
-      },
+              template: propiedadesTemplate,
+              initialState: { components },
+            },
       visor: state.viewportTemplate,
     };
 

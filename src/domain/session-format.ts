@@ -58,7 +58,7 @@ export interface SessionState {
 export interface SessionSnapshot {
   schema: 'visor-ifc-session';
   schemaVersion: 2;
-  appVersion: '2.0.0';
+  appVersion: '2.0.0' | '2.1.0';
   id: string;
   name: string;
   savedAt: string;
@@ -307,7 +307,7 @@ export function validateSnapshot(input: unknown): SessionSnapshot {
 
   if (raw.schema !== 'visor-ifc-session') fail('Formato de sesión no reconocido.');
   if (raw.schemaVersion !== 2) fail('Versión de esquema de sesión no soportada.');
-  if (raw.appVersion !== '2.0.0') fail('Versión de aplicación de sesión no compatible.');
+  if (raw.appVersion !== '2.0.0' && raw.appVersion !== '2.1.0') fail('Versión de aplicación de sesión no compatible.');
 
   const id = requireString(raw.id, 'id', MAX_ID);
   const name = requireString(raw.name, 'name', MAX_NAME);
@@ -358,7 +358,7 @@ export function validateSnapshot(input: unknown): SessionSnapshot {
   return {
     schema: 'visor-ifc-session',
     schemaVersion: 2,
-    appVersion: '2.0.0',
+    appVersion: raw.appVersion,
     id,
     name,
     savedAt,

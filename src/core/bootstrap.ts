@@ -31,6 +31,7 @@ import { configurarCorteYMedicion, configurarResaltado } from "./interaccion";
 import { viewportSettingsTemplate } from "../ui-templates/buttons/viewport-settings";
 import { verificarRecursosMotor } from "./recursos";
 import { avisar } from "../ui/feedback";
+import { mountSaveState } from '../ui/save-state';
 
 export async function iniciarVisor() {
 await verificarRecursosMotor();
@@ -144,12 +145,13 @@ app.layouts = {
 };
 app.layout = "App";
 
-document.title = `${APP.titulo} · UCSP`;
+document.title = `${APP.titulo} · UCSP · v${APP.version}`;
 let host=document.getElementById('workspace-host');
 for(let attempt=0;!host && attempt<100;attempt++) {await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));host=document.getElementById('workspace-host');}
 if(!host)throw new Error('No se pudo abrir el panel de información. Reintenta la apertura.');
 const workspace=new ModelWorkspace(components,world);
 const panel=mountWorkspacePanel(host,workspace);
+mountSaveState(components,world);
 const fragments=components.get(OBC.FragmentsManager);
 let refreshTimer: ReturnType<typeof setTimeout> | undefined;
 const scheduleRefresh=()=>{

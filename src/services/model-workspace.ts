@@ -702,6 +702,7 @@ export class ModelWorkspace {
     const manager=this.components.get(OBC.Viewpoints);
     this.views=[];
     for(const view of manager.list.values()) {
+      if(view.customData.pending)throw new Error('Espera a que termine el guardado del encuadre antes de guardar la sesión.');
       const state=view.customData.sessionCamera as CameraState | undefined;
       if(state)this.views.push({name:view.title || `Vista ${this.views.length+1}`,camera:cloneCamera(state)});
     }
@@ -723,7 +724,7 @@ export class ModelWorkspace {
     return {
       schema: "visor-ifc-session",
       schemaVersion: 2,
-      appVersion: "2.0.0",
+      appVersion: "2.1.0",
       id: newSessionId(),
       name,
       savedAt: new Date().toISOString(),

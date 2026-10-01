@@ -9,5 +9,5 @@ for(const [source,destination] of [['@thatopen/fragments/dist/Worker/worker.mjs'
   const output=path.join(root,'public',destination);mkdirSync(path.dirname(output),{recursive:true});copyFileSync(path.join(root,'node_modules',source),output);
   const bytes=readFileSync(output);assets[destination]={bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};
 }
-writeFileSync(path.join(root,'public','engine-version.json'),JSON.stringify({appVersion:'2.0.0',versions,assets},null,2)+'\n');
+writeFileSync(path.join(root,'public','engine-version.json'),JSON.stringify({appVersion:JSON.parse(readFileSync(path.join(root,'package.json'),'utf8')).version,versions,assets},null,2)+'\n');
 console.log('Motor autoalojado sincronizado:',versions);

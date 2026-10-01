@@ -164,6 +164,14 @@ function base(over = {}) {
 
 // ---------- Camino feliz ----------
 
+test('sesiones 2.1 conservan versión y la lectura 2.0 sigue siendo compatible', () => {
+  for(const appVersion of ['2.0.0','2.1.0']){
+    const out=parseSession(encodeSession(base({appVersion})));
+    assert.equal(out.appVersion,appVersion);
+  }
+  assert.throws(()=>validateSnapshot(base({appVersion:'2.2.0'})),/Versión de aplicación/);
+});
+
 test('validateSnapshot acepta una sesión válida y devuelve copia validada', () => {
   const input = base();
   const out = validateSnapshot(input);

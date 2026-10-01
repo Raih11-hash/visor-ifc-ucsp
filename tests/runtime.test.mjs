@@ -42,6 +42,7 @@ test('los binarios publicados coinciden con las dependencias instaladas', async 
   assert.ok(fs.existsSync(manifest), 'Falta el manifiesto versionado del motor');
   const { createHash } = await import('node:crypto');
   const data = JSON.parse(fs.readFileSync(manifest, 'utf8'));
+  assert.equal(data.appVersion, JSON.parse(fs.readFileSync(new URL('../package.json',import.meta.url),'utf8')).version);
   for (const [file, source] of [['fragments-worker.mjs', '@thatopen/fragments/dist/Worker/worker.mjs'], ['wasm/web-ifc.wasm', 'web-ifc/web-ifc.wasm']]) {
     const actual = fs.readFileSync(new URL('../public/' + file, import.meta.url));
     const installed = fs.readFileSync(new URL('../node_modules/' + source, import.meta.url));

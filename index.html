@@ -14,11 +14,11 @@
 <body>
   <header class="app-header">
     <div class="brand"><img src="./ucsp-escudo.svg" alt="UCSP" width="28" height="32"><div><strong>Visor IFC <span class="brand-divider">/</span> UCSP</strong><small>Laboratorio de información BIM</small></div></div>
-    <div class="header-actions"><span class="local-badge">Archivos en tu equipo</span><span id="release-version">v2.0</span><button id="show-help" type="button">Guía rápida</button></div>
+    <div class="header-actions"><span id="work-status" role="status" aria-live="polite">Sin cambios pendientes</span><button id="quick-session-save" type="button" disabled>Guardar sesión</button><span class="local-badge">Archivos en tu equipo</span><span id="release-version">v2.1</span><button id="show-help" type="button">Guía rápida</button></div>
   </header>
   <div id="feedback" role="status" aria-live="polite" hidden></div>
   <main class="viewer-shell"><bim-grid id="app"></bim-grid>
-    <section id="startup" class="startup" role="status" aria-live="polite"><div class="startup-card"><span class="eyebrow">VISOR IFC · V2.0</span><h1>Del modelo a la información</h1><p>Explora, filtra, revisa y guarda tu trabajo.</p><div class="startup-progress"><span class="spinner"></span><p id="startup-phase">Preparando el visor…</p></div><button id="retry-start" type="button" hidden>Reintentar apertura</button></div></section>
+    <section id="startup" class="startup" role="status" aria-live="polite"><div class="startup-card"><span class="eyebrow">VISOR IFC · V2.1</span><h1>Del modelo a la información</h1><p>Explora, filtra, revisa y guarda tu trabajo.</p><div class="startup-progress"><span class="spinner"></span><p id="startup-phase">Preparando el visor…</p></div><button id="retry-start" type="button" hidden>Reintentar apertura</button></div></section>
   </main>
   <dialog id="help-dialog"><div class="help-card"><span class="eyebrow">GUÍA RÁPIDA</span><h2>Una clase, cuatro herramientas</h2><ol><li><b>Abre un modelo:</b> usa IFC/Fragments, arrastra un archivo o carga un ejemplo.</li><li><b>Tablero y filtros:</b> explora solo los elementos con geometría y selecciona un conjunto.</li><li><b>Revisión:</b> define el dato esperado y consulta qué elementos no lo cumplen. No es una certificación de LOD ni una calificación automática.</li><li><b>Sesiones:</b> guarda modelos y trabajo en este navegador. Exporta una copia para respaldarla o llevarla a otro equipo.</li></ol><p>Las sesiones locales pueden perderse al borrar los datos del navegador. Límite: 100 MB por archivo, 200 MB por sesión. No subimos tus modelos a un servidor.</p><button id="close-help" type="button">Entendido</button></div></dialog>
   <noscript>Este visor necesita JavaScript. Habilítalo para abrir archivos IFC.</noscript>

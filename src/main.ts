@@ -9,7 +9,7 @@ const help = document.getElementById('help-dialog') as HTMLDialogElement;
 retry.addEventListener('click', () => window.location.reload());
 document.getElementById('show-help')?.addEventListener('click', () => help.showModal());
 document.getElementById('close-help')?.addEventListener('click', () => help.close());
-document.title = `${APP.titulo} · UCSP · v2.0`;
+document.title = `${APP.titulo} · UCSP · v${APP.version}`;
 window.addEventListener('unhandledrejection', (event) => { avisar(mensajeError(event.reason), true); });
 
 async function iniciar(): Promise<void> {

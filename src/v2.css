@@ -11,3 +11,68 @@ button,input,select{font:inherit}button{cursor:pointer;color:var(--lab-text);bac
 .lab-sidebar>bim-panel-section{flex-shrink:0;min-height:fit-content;overflow:visible}.lab-sidebar{scrollbar-gutter:stable}.lab-sidebar>div{flex-shrink:0}
 @media(max-width:1000px){.app-header{padding:10px 14px}.local-badge{display:none}.brand strong{font-size:14px}.header-actions{gap:6px}.header-actions button{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.spinner{animation:none}}
+
+/* ---- v2.1: navegación directa y layout adaptable ---- */
+.lab-sidebar{position:relative;display:flex;flex-direction:column;gap:.5rem;height:100%;min-width:0;padding:0 .25rem;overflow:hidden}
+.lab-sidebar-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-shrink:0}
+.lab-nav{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;flex-shrink:0}
+.lab-nav button{min-height:36px;font-size:12px;padding:6px 4px;background:#283440;border:1px solid #4a5765;border-radius:5px;color:var(--lab-text)}
+.lab-nav button[aria-selected=true]{background:#394654;color:#fff;box-shadow:0 1px 4px #0005}
+.lab-sidebar>.lab-panes{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-gutter:stable;padding-right:.25rem}
+.lab-pane{display:block}
+.lab-pane[hidden]{display:none!important}
+.lab-sidebar.is-collapsed .lab-nav,.lab-sidebar.is-collapsed .lab-panes{display:none}
+.layout-btn{min-height:36px;min-width:36px;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:6px 10px;font-size:12px}
+.lab-resizer{position:absolute;top:0;right:-3px;width:7px;height:100%;cursor:col-resize;background:transparent;z-index:6;touch-action:none}
+.lab-resizer:hover,.lab-resizer:focus-visible{background:var(--lab-accent);outline:none}
+.layout-properties{display:flex;flex-direction:column;height:100%;min-width:0}
+.layout-properties-body{flex:1;min-height:0;overflow:auto}
+.layout-properties.is-collapsed .layout-properties-body{display:none}
+.layout-panel-tools{flex-shrink:0;margin-bottom:.25rem}
+.layout-panel-tools .layout-btn{width:100%;justify-content:flex-start}
+.header-nav{display:flex;gap:6px;align-items:center}
+.header-nav .layout-btn[aria-current=true]{background:#394654;color:#fff}
+
+/* Modo presentación: canvas amplio sin paneles, reversible. */
+body.layout-presentation #app-content{grid-template:"visor" 1fr / 1fr!important}
+body.layout-presentation .lab-sidebar,body.layout-presentation #panel-propiedades{display:none!important}
+
+/* Móvil (<=800): un solo panel superpuesto; cerrar deja el canvas a ancho completo. */
+@media(max-width:800px){
+  #app-content{grid-template:"visor" 1fr / 1fr!important}
+  .app-header{height:auto;min-height:68px;flex-wrap:wrap;gap:8px}
+  .header-nav{flex-wrap:wrap}
+  .lab-nav button,.layout-btn,.header-nav button{min-height:44px}
+  .header-nav button{font-size:11px;padding:6px 8px}
+  .lab-sidebar,#panel-propiedades{position:absolute;top:0;left:0;bottom:0;z-index:130;width:min(88vw,360px);max-width:88vw;display:none;padding:12px;background:var(--lab-panel);border-right:1px solid var(--lab-line);box-shadow:0 0 40px #000a;overflow:hidden}
+  #panel-propiedades{left:auto;right:0;width:min(92vw,420px);max-width:92vw;border-right:none;border-left:1px solid var(--lab-line)}
+  body.mobile-panel-sidebar .lab-sidebar{display:flex}
+  body.mobile-panel-properties #panel-propiedades{display:flex}
+}
+
+/* Cabecera en dos líneas: navegación y guardado no compiten por el ancho. */
+.app-header{height:auto;min-height:90px;gap:12px;padding:10px 18px}
+.header-actions{flex-wrap:wrap;justify-content:flex-end;min-width:0;gap:6px}
+.header-nav{flex-basis:100%;flex-wrap:wrap;justify-content:flex-end;gap:4px}
+#work-status{font-size:11px;color:var(--lab-muted)}
+#work-status[data-dirty=true]{color:#ffc18d}
+#quick-session-save{min-height:36px;background:#9d453d;border-color:#c76055}
+.layout-properties.is-collapsed .layout-panel-tools button{writing-mode:vertical-rl;min-height:120px;width:42px;padding:10px 6px}
+.lab-sidebar.is-collapsed .lab-sidebar-head>div{display:none}
+.workspace-panel button{min-height:36px}
+.saved-view-row{padding:10px 0;border-bottom:1px solid var(--lab-line)}
+.saved-view-row>strong{font-size:13px;overflow-wrap:anywhere}
+#view-list{max-height:none;overflow:visible}
+@media(max-width:800px){
+ .app-header{padding:8px 12px;min-height:0;gap:6px}
+ .brand small{display:none}.brand strong{font-size:14px}
+ .header-actions{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:4px}
+ .header-nav{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;gap:4px}
+ .header-nav #header-nav-tree{display:none}
+ #toggle-presentation{grid-column:2/5}
+ #work-status{grid-column:1/-1;font-size:11px}
+ #quick-session-save{min-height:44px}
+ #show-help{min-height:44px}
+ .workspace-panel button{min-height:44px}
+ .lab-resizer{display:none}
+}
