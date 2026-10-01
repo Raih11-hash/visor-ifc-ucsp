@@ -4,6 +4,13 @@ Convención: cada cambio visible y probado sube la versión (1.0 → 1.1 → 1.2
 → 1.9 → 2.0). En git, cada versión publicada lleva su etiqueta (`git tag v1.1`).
 Para volver a una versión anterior: `git checkout v1.0` (o desplegar su commit).
 
+## v2.1.1 (preview RV5; producción v1.0 intacta)
+
+- Controles directos y reversibles de cuadrícula y marca; marca oculta por API oficial, sin borrar avisos de licencia.
+- Propiedades protegidas contra respuestas tardías tras limpiar/cambiar selección; agrupación de cambios rápidos de 120ms, sin limitar selección o Psets/cantidades.
+- Nuevas regresiones integradas en la suite E2E; paquete/manifiesto/título/códec coherentes, lectura de sesiones 2.0.0/2.1.0/2.1.1.
+- Alcance y límites en `ALCANCE_AJUSTES_RV5.md`. No se reprodujeron los 8.02s de la captura ni se certifica rendimiento con IFC grandes. Sin merge/tag/release o cambios de producción.
+
 ## v2.1 (preview RV4; producción v1.0 intacta)
 
 - Encuadres sin PNG obligatorio, cámara actualizada coherente con sesión, nombres/acciones en español y errores/timeouts sin filas incompletas.

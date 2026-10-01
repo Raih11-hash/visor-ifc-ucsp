@@ -1,5 +1,5 @@
 {
-  "appVersion": "2.1.0",
+  "appVersion": "2.1.1",
   "versions": {
     "@thatopen/fragments": "3.4.7",
     "web-ifc": "0.0.77"

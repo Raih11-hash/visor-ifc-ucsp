@@ -11,6 +11,7 @@ import * as CUI from "@thatopen/ui-obc";
 import * as OBC from "@thatopen/components";
 import * as OBF from "@thatopen/components-front";
 import { appIcons } from "../../globals";
+import { protectLatestTableLoad } from "../../ui/latest-table-load";
 
 export interface ElementsDataPanelState {
   components: OBC.Components;
@@ -29,12 +30,31 @@ export const elementsDataPanelTemplate: BUI.StatefullComponent<
   });
 
   propsTable.preserveStructureOnFilter = true;
+  const invalidateProps = protectLatestTableLoad(propsTable);
+  let pendingSelection: ReturnType<typeof setTimeout> | undefined;
 
   highlighter.events.select.onHighlight.add((modelIdMap) => {
-    updatePropsTable({ modelIdMap });
+    invalidateProps();
+    propsTable.data = [];
+    // El resaltador puede modificar sus Sets después del evento.
+    const snapshot: OBC.ModelIdMap = Object.fromEntries(
+      Object.entries(modelIdMap).map(([model, ids]) => [model, new Set(ids)]),
+    );
+    clearTimeout(pendingSelection);
+    propsTable.loading = true;
+    // Evitar consultas profundas intermedias al cambiar rápidamente de elemento.
+    pendingSelection = setTimeout(() => {
+      pendingSelection = undefined;
+      updatePropsTable({ modelIdMap: snapshot });
+    }, 120);
   });
 
   highlighter.events.select.onClear.add(() => {
+    clearTimeout(pendingSelection);
+    pendingSelection = undefined;
+    invalidateProps();
+    propsTable.data = [];
+    propsTable.loading = false;
     updatePropsTable({ modelIdMap: {} });
   });
 

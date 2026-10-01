@@ -76,3 +76,7 @@ body.layout-presentation .lab-sidebar,body.layout-presentation #panel-propiedade
  .workspace-panel button{min-height:44px}
  .lab-resizer{display:none}
 }
+/* Opciones visuales del viewport: controles directos y reversibles. */
+.viewport-display-controls{position:absolute;top:.5rem;right:.5rem;z-index:20;display:flex;gap:4px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100% - 1rem)}
+.viewport-display-controls>button{min-height:36px;font-size:11px;padding:6px 8px;background:#1b222ce8}
+@media(max-width:800px){.viewport-display-controls>button{min-height:44px}.viewport-display-controls{gap:3px}}

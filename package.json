@@ -1,6 +1,6 @@
 {
   "name": "visor-ifc-ucsp",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "type": "module",
   "engines": {
     "node": ">=22.18.0"
@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "check": "tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
-    "test:e2e": "uv run --no-project --python 3.11 --with playwright python scripts/smoke_v2.py && uv run --no-project --python 3.11 --with playwright python scripts/smoke_views_v21.py && uv run --no-project --python 3.11 --with playwright python scripts/smoke_layout_v21.py",
+    "test:e2e": "uv run --no-project --python 3.11 --with playwright python scripts/smoke_v2.py && uv run --no-project --python 3.11 --with playwright python scripts/smoke_views_v21.py && uv run --no-project --python 3.11 --with playwright python scripts/smoke_layout_v21.py && uv run --no-project --python 3.11 --with playwright python scripts/smoke_display_v21.py && uv run --no-project --python 3.11 --with playwright python scripts/smoke_properties_v21.py",
     "sync:engine": "node scripts/sync-engine.mjs"
   },
   "devDependencies": {

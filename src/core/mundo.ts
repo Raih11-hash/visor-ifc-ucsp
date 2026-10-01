@@ -43,6 +43,8 @@ export const crearMundo = (components: OBC.Components): MundoPrincipal => {
   });
 
   world.renderer = new OBF.PostproductionRenderer(components, viewport);
+  // API pública del SDK para un viewport limpio; conservar avisos de licencia.
+  world.renderer.showLogo = false;
   world.camera = new OBC.OrthoPerspectiveCamera(components);
   world.camera.threePersp.near = 0.01;
   world.camera.threePersp.updateProjectionMatrix();

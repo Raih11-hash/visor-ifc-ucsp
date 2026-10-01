@@ -1,6 +1,7 @@
 import pathlib,os,json,threading,http.server,functools,traceback,sys
 from playwright.sync_api import sync_playwright,expect
 ROOT=pathlib.Path(__file__).resolve().parent.parent
+VERSION=json.loads((ROOT/'package.json').read_text(encoding='utf8'))['version']
 OUT=ROOT/'test-results';OUT.mkdir(exist_ok=True)
 class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self,*args):pass
@@ -27,8 +28,8 @@ try:
         page=context.new_page();page.set_default_timeout(20000)
         page.on('pageerror',lambda e:results['page_errors'].append(str(e)))
         page.goto(URL,wait_until='domcontentloaded')
-        check('título de pestaña coherente con 2.1',lambda:expect(page).to_have_title(__import__('re').compile(r'v2\.1')) )
-        check('version 2.1 visible',lambda:expect(page.locator('#release-version')).to_have_text('v2.1',timeout=10000))
+        check('título de pestaña coherente con paquete',lambda:expect(page).to_have_title(__import__('re').compile(__import__('re').escape('v'+VERSION))) )
+        check('versión visible coherente con paquete',lambda:expect(page.locator('#release-version')).to_have_text('v'+VERSION,timeout=10000))
         check('arranque sin pantalla vacia',lambda:page.wait_for_function('document.documentElement.dataset.appState === "ready"',timeout=90000))
         check('canvas creado',lambda:expect(page.locator('canvas')).to_have_count(1))
         page.locator("#nav-workspace").click()
