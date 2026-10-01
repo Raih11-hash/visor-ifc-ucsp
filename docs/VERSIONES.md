@@ -4,6 +4,13 @@ Convención: cada cambio visible y probado sube la versión (1.0 → 1.1 → 1.2
 → 1.9 → 2.0). En git, cada versión publicada lleva su etiqueta (`git tag v1.1`).
 Para volver a una versión anterior: `git checkout v1.0` (o desplegar su commit).
 
+## v2.1.2 (preview RV6; producción v1.0 intacta)
+
+- Panel derecho acotado a la altura disponible (`min-height:0`, `overflow:hidden` en contenedor flex/grid); el árbol expandido ahora desborda hacia su región de scroll, no fuera de la pantalla.
+- Regresión con IFC real: rueda al fondo y último campo visible, escritorio y móvil; plegar/reabrir mantiene datos y scroll no modifica cámara.
+- Smoke nuevo integrado en suite E2E. Códec acepta sesiones 2.0.0/2.1.0/2.1.1/2.1.2, sin cambiar esquema.
+- URL corta ya aprobada: asignación pendiente por acceso Vercel, no por autorización del nombre. Producción y protección no se modifican.
+
 ## v2.1.1 (preview RV5; producción v1.0 intacta)
 
 - Controles directos y reversibles de cuadrícula y marca; marca oculta por API oficial, sin borrar avisos de licencia.

@@ -165,7 +165,7 @@ function base(over = {}) {
 // ---------- Camino feliz ----------
 
 test('sesiones 2.1 conservan versión y la lectura 2.0 sigue siendo compatible', () => {
-  for(const appVersion of ['2.0.0','2.1.0','2.1.1']){
+  for(const appVersion of ['2.0.0','2.1.0','2.1.1','2.1.2']){
     const out=parseSession(encodeSession(base({appVersion})));
     assert.equal(out.appVersion,appVersion);
   }

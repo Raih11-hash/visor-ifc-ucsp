@@ -17,7 +17,7 @@ const urlAbsoluta = (relativa: string) =>
   new URL(relativa, document.baseURI).href;
 
 export const APP = {
-  version: "2.1.1",
+  version: "2.1.2",
   titulo: "Visor IFC",
   subtitulo: "UCSP · Ingeniería Civil",
   modeloEjemploNombre: "Edificio ejemplo (IFC4)",
