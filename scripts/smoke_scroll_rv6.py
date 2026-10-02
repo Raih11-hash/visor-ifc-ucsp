@@ -1,4 +1,9 @@
-"""Regresión de scroll en propiedades expandidas, IFC real."""
+"""Regresión de scroll en propiedades expandidas, IFC real.
+
+Adaptado al inspector propio (RV9): el árbol vive en `#panel-propiedades-body`
+como `.ifc-props-*`; conserva las mismas garantías de scroll desktop/móvil,
+último campo visible y cámara intacta.
+"""
 import pathlib,os,json,threading,http.server,functools,traceback,sys
 from playwright.sync_api import sync_playwright,expect
 ROOT=pathlib.Path(__file__).resolve().parent.parent;OUT=ROOT/'test-results';OUT.mkdir(exist_ok=True)
@@ -17,11 +22,11 @@ try:
             page.goto(f'http://127.0.0.1:{server.server_port}/?test=1');page.wait_for_function('document.documentElement.dataset.appState==="ready"',timeout=90000)
             page.locator('bim-button[label="Cargar ejemplo"]').click();page.wait_for_function('document.querySelector("#catalog-total").textContent==="13"&&document.querySelector("#workspace-v2").dataset.indexState==="ready"',timeout=90000)
             page.evaluate('window.__IFC_TEST.workspace.select(window.__IFC_TEST.workspace.records)')
-            page.wait_for_function('document.querySelector("#panel-propiedades-body bim-table").data.length===13',timeout=90000)
-            page.evaluate('document.querySelector("#panel-propiedades-body bim-table").expanded=true')
-            page.locator('#panel-propiedades-body bim-table-group').evaluate_all('(groups)=>groups.forEach(g=>g.toggleChildren(true))')
+            page.wait_for_function('window.__IFC_PROPS.elements.length===13&&!window.__IFC_PROPS.loading',timeout=90000)
+            page.evaluate("document.querySelectorAll('#panel-propiedades-body .ifc-props-group').forEach(d=>d.open=true)")
             page.wait_for_timeout(1000)
-            print('GROUPS',page.locator('#panel-propiedades-body bim-table-group').count(),flush=True)
+            print('GROUPS',page.locator('#panel-propiedades-body .ifc-props-group').count(),flush=True)
+            check('el árbol renderiza los 13 elementos',lambda:same(page.locator('#panel-propiedades-body .ifc-props-element').count(),13))
             selector='#panel-propiedades-body'
             body=page.locator(selector)
             check('panel derecho queda dentro de pantalla y tiene recorrido de scroll',lambda:same(body.evaluate('(b)=>b.getBoundingClientRect().bottom<=innerHeight+1&&b.scrollHeight>b.clientHeight+1'),True))
@@ -32,12 +37,12 @@ try:
                 page.wait_for_function('(()=>{const b=document.querySelector("#panel-propiedades-body");return b.scrollTop+b.clientHeight>=b.scrollHeight-2;})()')
             wheel_to_end()
             check('rueda llega al fondo real de propiedades',lambda:same(body.evaluate('(b)=>b.scrollTop>0&&b.scrollTop+b.clientHeight>=b.scrollHeight-2'),True))
-            last=page.locator('#panel-propiedades-body bim-table-row').last
+            last=page.locator('#panel-propiedades-body .ifc-props-row').last
             check('último campo del árbol visible dentro del panel',lambda:same(last.evaluate('(r)=>{const b=document.querySelector("#panel-propiedades-body").getBoundingClientRect(),q=r.getBoundingClientRect();return q.top>=b.top-1&&q.bottom<=b.bottom+1;}'),True))
             check('scroll en propiedades no cambia cámara 3D',lambda:same(page.evaluate('JSON.stringify(window.__IFC_TEST.world.camera.three.position.toArray())===window.__cameraBeforeScroll'),True))
             page.screenshot(path=str(OUT/'scroll-properties-rv6-desktop.png'),full_page=True)
             page.locator('#toggle-properties').click();page.locator('#toggle-properties').click();page.wait_for_timeout(200)
-            check('plegar y abrir conserva selección y datos',lambda:same(page.evaluate('document.querySelector("#panel-propiedades-body bim-table").data.length'),13))
+            check('plegar y abrir conserva selección y datos',lambda:same(page.evaluate('window.__IFC_PROPS.elements.length'),13))
             page.set_viewport_size({'width':390,'height':844});page.locator('#header-nav-properties').click();page.wait_for_timeout(200)
             body.evaluate('(b)=>b.scrollTop=0');wheel_to_end()
             check('scroll móvil llega al fondo',lambda:same(body.evaluate('(b)=>b.scrollTop+b.clientHeight>=b.scrollHeight-2'),True))

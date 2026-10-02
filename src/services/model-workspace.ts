@@ -724,7 +724,7 @@ export class ModelWorkspace {
     return {
       schema: "visor-ifc-session",
       schemaVersion: 2,
-      appVersion: "2.1.2",
+      appVersion: "2.2.0",
       id: newSessionId(),
       name,
       savedAt: new Date().toISOString(),

@@ -164,12 +164,12 @@ function base(over = {}) {
 
 // ---------- Camino feliz ----------
 
-test('sesiones 2.1 conservan versión y la lectura 2.0 sigue siendo compatible', () => {
-  for(const appVersion of ['2.0.0','2.1.0','2.1.1','2.1.2']){
+test('sesiones 2.2 conservan versión y las anteriores siguen siendo compatibles', () => {
+  for(const appVersion of ['2.0.0','2.1.0','2.1.1','2.1.2','2.2.0']){
     const out=parseSession(encodeSession(base({appVersion})));
     assert.equal(out.appVersion,appVersion);
   }
-  assert.throws(()=>validateSnapshot(base({appVersion:'2.2.0'})),/Versión de aplicación/);
+  assert.throws(()=>validateSnapshot(base({appVersion:'2.3.0'})),/Versión de aplicación/);
 });
 
 test('validateSnapshot acepta una sesión válida y devuelve copia validada', () => {

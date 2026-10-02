@@ -1,8 +1,24 @@
 # Historial de versiones — Visor IFC · UCSP
 
-Convención: cada cambio visible y probado sube la versión (1.0 → 1.1 → 1.2 → …
-→ 1.9 → 2.0). En git, cada versión publicada lleva su etiqueta (`git tag v1.1`).
-Para volver a una versión anterior: `git checkout v1.0` (o desplegar su commit).
+Convención: las versiones de la aplicación siguen SemVer (por ejemplo, v2.2 → `2.2.0` en el paquete); RV identifica revisiones de documentación y respaldos. Las publicaciones de prueba se registran por commit y deployment. **No crear tags, releases ni sustituir main sin aprobación explícita.** Las entradas históricas describen su estado al publicarse, no el destino actual de los alias.
+
+Dirección principal de trabajo actual: **https://ifc-ucsp.vercel.app** (línea v2, pública). Dirección histórica: **https://visor-ifc-ucsp.vercel.app** (v1.0 congelada). Ver [README](../README.md) y [alcance v2.2 RV9](PLAN_V22_RV9.md).
+
+## v2.2.0 (entrega RV9; rama preview, main/v1.0 intacta)
+
+Base: v2.1.2 / `5477107faa0159af51e1e3db7d10bdda1077ba60`. La dirección principal de la línea v2 es `https://ifc-ucsp.vercel.app`; la publicación se activa solo después de pruebas y revisión, verificando el SHA y el destino del alias manual.
+
+- Cabecera de escritorio en una fila, adaptable a móvil; altura99→60px y39px adicionales de canvas comprobados a1920/1366/1024.
+- Inspector BIM por Psets originales, con nombre/valor separados, expandir/contraer, búsqueda y TSV. Vista técnica opcional para atributos, tipos, IDs, referencias y relaciones.
+- Causa demostrada: transformación de Value en `ui-obc.tables.itemsData` dejaba textos/booleanos vacíos al no encontrarles unidad. Parser y datos FRAG conservaban los valores; no se modifica Revit ni el IFC.
+- Normalización visual tipada reusable: textos, números, booleanos/lógicos, nulos, medidas, unidades SI/conversión/propias, referencias y valores compuestos. Unit explícita no resoluble muestra su referencia, nunca una unidad global falsa.
+- Selección múltiple sin límite silencioso; cargas por lotes, protección de respuestas/errores tardíos, reintento y eliminación de datos al cerrar modelos.
+- Sesiones mantienen esquema2, emiten2.2.0 y leen2.0.0/2.1.0/2.1.1/2.1.2. La v2.1.2 antigua no lee sesiones marcadas2.2.0.
+- README/LEEME separan dirección principal, producción antigua y respaldos históricos; se conservan los documentos originales.
+- Verificación local final: TypeScript/build OK,175 pruebas Node sin omisiones,264 comprobaciones Chromium (225 estándar+39 real-IFC). Auditorías npm producción/completa:0 vulnerabilidades. Las pruebas con baseline de cabecera suman2 comprobaciones de espacio ganado; sin esa evidencia la suite estándar contiene223.
+- Archivo real: `EST_GT_C_R_v5.ifc`, SHA-256 `e496972a1f74199d9b3fb9e1cfce859606197bfd0ae67dd274011119bad23979`. IFCBEAM GUID `3zSxltga9Eo8qEtsMwBJvC`: Construction→H/V=H, Nivel=N4, Tipo de elemento=Vigas, también tras restaurar FRAG.
+
+Detalle y límites: [PROPIEDADES_V22_RV9.md](PROPIEDADES_V22_RV9.md). No se certifican metrados, IDS ni rendimiento en equipos de alumnos. Sin cambio de dependencias, IFC original, main, tags ni releases.
 
 ## v2.1.2 (preview RV6; producción v1.0 intacta)
 

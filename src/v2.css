@@ -50,13 +50,25 @@ body.layout-presentation .lab-sidebar,body.layout-presentation #panel-propiedade
   body.mobile-panel-properties #panel-propiedades{display:flex}
 }
 
-/* Cabecera en dos líneas: navegación y guardado no compiten por el ancho. */
-.app-header{height:auto;min-height:90px;gap:12px;padding:10px 18px}
-.header-actions{flex-wrap:wrap;justify-content:flex-end;min-width:0;gap:6px}
-.header-nav{flex-basis:100%;flex-wrap:wrap;justify-content:flex-end;gap:4px}
-#work-status{font-size:11px;color:var(--lab-muted)}
+/* Cabecera compacta de UNA fila en escritorio: marca | navegación | acciones.
+   El subtítulo y la insignia se ocultan en anchos estrechos (su texto queda
+   disponible como tooltip) antes que romper la fila o recortar botones. */
+.app-header{height:60px;min-height:60px;gap:14px;padding:0 18px;flex-wrap:nowrap;overflow:hidden}
+.brand{flex:0 0 auto;min-width:0}
+.header-actions{flex:1 1 auto;flex-wrap:nowrap;justify-content:flex-end;align-items:center;min-width:0;gap:6px}
+.header-nav{display:flex;flex-wrap:nowrap;align-items:center;gap:4px;flex:0 1 auto;min-width:0;margin-right:auto}
+.header-nav .layout-btn,.header-actions button,.header-actions span{white-space:nowrap}
+#work-status{font-size:11px;color:var(--lab-muted);flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
 #work-status[data-dirty=true]{color:#ffc18d}
 #quick-session-save{min-height:36px;background:#9d453d;border-color:#c76055}
+@media(max-width:1240px){
+ .app-header{gap:10px;padding:0 14px}
+ .brand strong{font-size:15px}
+ .brand small{display:none}
+ .local-badge{display:none}
+ .header-nav{gap:3px}
+ .header-nav button,.header-actions button{padding:6px 8px;font-size:11px}
+}
 .layout-properties.is-collapsed .layout-panel-tools button{writing-mode:vertical-rl;min-height:120px;width:42px;padding:10px 6px}
 .lab-sidebar.is-collapsed .lab-sidebar-head>div{display:none}
 .workspace-panel button{min-height:36px}
@@ -64,7 +76,7 @@ body.layout-presentation .lab-sidebar,body.layout-presentation #panel-propiedade
 .saved-view-row>strong{font-size:13px;overflow-wrap:anywhere}
 #view-list{max-height:none;overflow:visible}
 @media(max-width:800px){
- .app-header{padding:8px 12px;min-height:0;gap:6px}
+ .app-header{height:auto;min-height:0;flex-wrap:wrap;overflow:visible;padding:8px 12px;gap:6px}
  .brand small{display:none}.brand strong{font-size:14px}
  .header-actions{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:4px}
  .header-nav{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;gap:4px}

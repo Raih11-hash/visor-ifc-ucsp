@@ -39,6 +39,9 @@ try:
         page.locator("#nav-models").click()
         page.locator('bim-button[label="Cargar ejemplo"]').click()
         check('IFC ejemplo carga con geometria',lambda:page.wait_for_function('Number(document.querySelector("#catalog-total").textContent)>0 && document.querySelector("#workspace-v2").dataset.indexState==="ready"',timeout=90000))
+        # El catálogo puede quedar ready antes del finally que libera la carga.
+        # Esperar el botón y el mensaje final evita soltar el segundo IFC aún ocupado.
+        page.wait_for_function('document.querySelector(\'bim-button[label="Cargar ejemplo"]\')?.loading === false && document.querySelector("[data-estado-modelos]").textContent.includes("Modelo de ejemplo listo")',timeout=90000)
         original=page.evaluate('window.__IFC_TEST.workspace.records.length')
         results['example_count']=original
         page.evaluate('async()=>{const bytes=await (await fetch("./models/ejemplo.ifc")).arrayBuffer();const dt=new DataTransfer();dt.items.add(new File([bytes],"copia_del_modelo.ifc"));document.querySelector("bim-viewport").dispatchEvent(new DragEvent("drop",{dataTransfer:dt,bubbles:true}));}')

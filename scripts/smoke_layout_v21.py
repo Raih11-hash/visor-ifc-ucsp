@@ -77,6 +77,14 @@ try:
         for hdr in ['#header-nav-models', '#header-nav-workspace', '#header-nav-views', '#toggle-presentation']:
             check(f'acceso cabecera {hdr}', lambda hdr=hdr: expect(page.locator(hdr)).to_be_visible())
 
+        # v2.2: la cabecera de escritorio debe quedar en UNA sola fila, compacta
+        # y sin desbordar (antes se apilaba en dos líneas).
+        header_row = page.evaluate('''()=>{const sels=['.brand','#header-nav','#work-status','#quick-session-save','#release-version','#show-help'];const ys=sels.map(s=>{const e=document.querySelector(s);const r=e.getBoundingClientRect();return (r.top+r.bottom)/2;});const h=document.querySelector('.app-header');return {spread:Math.max(...ys)-Math.min(...ys), height:h.getBoundingClientRect().height, overflow:h.scrollWidth-h.clientWidth};}''')
+        results['header_row'] = header_row
+        check('cabecera de escritorio en una sola fila', lambda: assert_true(header_row['spread'] <= 24, f"dispersión vertical {header_row['spread']:.1f}px"))
+        check('cabecera de escritorio sin desbordamiento', lambda: assert_true(header_row['overflow'] <= 1, f"desborda {header_row['overflow']}px"))
+        check('cabecera de escritorio compacta (<=72px)', lambda: assert_true(header_row['height'] <= 72, f"alto {header_row['height']:.1f}px"))
+
         # Tamaño mínimo de controles en escritorio (>=36px).
         box = page.locator('#nav-models').bounding_box()
         check('controles escritorio >=36px', lambda: assert_true(box and box['height'] >= 36, f'altura {box}'))
