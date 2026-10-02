@@ -1,0 +1,17 @@
+{
+  "appVersion": "2.2.0",
+  "versions": {
+    "@thatopen/fragments": "3.4.7",
+    "web-ifc": "0.0.77"
+  },
+  "assets": {
+    "fragments-worker.mjs": {
+      "bytes": 3267026,
+      "sha256": "b943c3bfd31793b9fdac0a2eca94176447d44624173b51c60bcb45834e62050b"
+    },
+    "wasm/web-ifc.wasm": {
+      "bytes": 1303940,
+      "sha256": "392b547232aa63df84961d9d3d6e2a7a259cd832b888830cab2ee30778bf28a0"
+    }
+  }
+}

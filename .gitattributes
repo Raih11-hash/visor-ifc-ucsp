@@ -1,0 +1,3 @@
+# Binarios y Worker de terceros: conservar bytes exactos del motor.
+public/fragments-worker.mjs -text
+public/wasm/*.wasm -text

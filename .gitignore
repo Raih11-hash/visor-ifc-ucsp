@@ -26,3 +26,6 @@ dist-ssr
 resources
 # Artefactos de deploy (se regeneran con npm run build)
 *.zip
+test-results/
+__pycache__/
+*.pyc

@@ -17,6 +17,7 @@ import {
   ViewpointsPanelState,
   viewpointsPanelTemplate,
 } from "../sections/viewpoints";
+import "../../ui/layout-controls";
 
 export interface BarraLateralState {
   components: OBC.Components;
@@ -41,14 +42,44 @@ export const barraLateralTemplate: BUI.StatefullComponent<BarraLateralState> = (
   const estadoVistas: ViewpointsPanelState = { components, world };
 
   return BUI.html`
-    <div style="display: flex; flex-direction: column; gap: 1rem; overflow-y: auto; height: 100%; padding: 0 0.25rem;">
-      <div>
-        <bim-label style="font-size: 1.1rem; font-weight: bold;">${APP.titulo}</bim-label>
-        <bim-label style="font-size: 0.8rem;">${APP.subtitulo}</bim-label>
+      <div id="lab-sidebar" class="lab-sidebar">
+        <div class="lab-sidebar-head">
+          <div>
+            <bim-label style="font-size: 1.1rem; font-weight: bold;">${APP.titulo}</bim-label>
+            <bim-label style="font-size: 0.8rem;">${APP.subtitulo}</bim-label>
+          </div>
+          <button id="sidebar-toggle" type="button" class="layout-btn" aria-expanded="true"
+            aria-controls="lab-sidebar" aria-label="Contraer barra lateral">⟨</button>
+        </div>
+
+        <nav class="lab-nav" role="tablist" aria-label="Secciones del visor">
+          <button id="nav-models" type="button" role="tab" aria-selected="true"
+            aria-controls="pane-models" data-nav-tab="models">Modelos</button>
+          <button id="nav-workspace" type="button" role="tab" aria-selected="false"
+            aria-controls="pane-workspace" data-nav-tab="workspace">Información</button>
+          <button id="nav-tree" type="button" role="tab" aria-selected="false"
+            aria-controls="pane-tree" data-nav-tab="tree">Árbol</button>
+          <button id="nav-views" type="button" role="tab" aria-selected="false"
+            aria-controls="pane-views" data-nav-tab="views">Vistas</button>
+        </nav>
+
+        <div class="lab-panes">
+          <section id="pane-models" class="lab-pane" role="tabpanel" aria-labelledby="nav-models" data-nav-pane="models">
+            ${modelsPanelTemplate(estadoModelos, estatico(estadoModelos))}
+          </section>
+          <section id="pane-workspace" class="lab-pane" role="tabpanel" aria-labelledby="nav-workspace" data-nav-pane="workspace" hidden>
+            <div id="workspace-host"></div>
+          </section>
+          <section id="pane-tree" class="lab-pane" role="tabpanel" aria-labelledby="nav-tree" data-nav-pane="tree" hidden>
+            ${arbolPanelTemplate(estadoArbol, estatico(estadoArbol))}
+          </section>
+          <section id="pane-views" class="lab-pane" role="tabpanel" aria-labelledby="nav-views" data-nav-pane="views" hidden>
+            ${viewpointsPanelTemplate(estadoVistas, estatico(estadoVistas))}
+          </section>
+        </div>
+
+        <div id="sidebar-resizer" class="lab-resizer" role="separator" aria-orientation="vertical"
+          tabindex="0" aria-label="Ajustar ancho de la barra lateral" aria-valuemin="220" aria-valuemax="560" aria-valuenow="352"></div>
       </div>
-      ${modelsPanelTemplate(estadoModelos, estatico(estadoModelos))}
-      ${arbolPanelTemplate(estadoArbol, estatico(estadoArbol))}
-      ${viewpointsPanelTemplate(estadoVistas, estatico(estadoVistas))}
-    </div>
-  `;
-};
+    `;
+  };

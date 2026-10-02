@@ -13,6 +13,7 @@ import * as THREE from "three";
 import * as OBC from "@thatopen/components";
 import * as OBF from "@thatopen/components-front";
 import type { MundoPrincipal } from "./mundo";
+import { isEditingPath } from "../domain/runtime";
 
 export const configurarResaltado = (
   components: OBC.Components,
@@ -41,6 +42,7 @@ export const configurarCorteYMedicion = (
     if (clipper.enabled) clipper.create(world);
   };
   window.addEventListener("keydown", (event) => {
+    if (isEditingPath(event.composedPath().filter((node): node is HTMLElement => node instanceof HTMLElement))) return;
     if (event.code === "Delete" || event.code === "Backspace") {
       clipper.delete(world);
     }
@@ -59,6 +61,7 @@ export const configurarCorteYMedicion = (
   });
   viewport.addEventListener("dblclick", () => lengthMeasurer.create());
   window.addEventListener("keydown", (event) => {
+    if (isEditingPath(event.composedPath().filter((node): node is HTMLElement => node instanceof HTMLElement))) return;
     if (event.code === "Delete" || event.code === "Backspace") {
       lengthMeasurer.delete();
     }
@@ -78,6 +81,7 @@ export const configurarCorteYMedicion = (
     areaMeasurer.create();
   });
   window.addEventListener("keydown", (event) => {
+    if (isEditingPath(event.composedPath().filter((node): node is HTMLElement => node instanceof HTMLElement))) return;
     if (event.code === "Enter" || event.code === "NumpadEnter") {
       areaMeasurer.endCreation();
     }
